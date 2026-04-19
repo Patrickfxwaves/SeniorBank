@@ -1,0 +1,949 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+--gold:#C9A84C;--gold-l:#E8D5A3;--gold-d:#8B6914;--gold-p:#FDF6E7;
+--navy:#0D1B2A;--navy-m:#1A2D42;--navy-l:#243447;
+--cream:#F7F4EE;--cream-d:#EDE8DE;
+--teal:#1B7A6E;--teal-l:#22A896;--teal-p:#E6F5F3;
+--red:#C94B4B;--red-p:#FCEAEA;
+--w:#FFFFFF;
+--td:#0D1B2A;--tm:#3D5166;--tl:#6B8099;--tmut:#9AB0C2;
+--bdr:rgba(201,168,76,0.18);
+}
+body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
+.app{max-width:420px;margin:0 auto;background:var(--w);min-height:780px;border-radius:28px;box-shadow:0 20px 70px rgba(13,27,42,0.18);overflow:hidden;position:relative}
+.scr{display:none;flex-direction:column;min-height:780px;animation:fi .28s ease}
+.scr.on{display:flex}
+@keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+.nb{display:flex;justify-content:space-around;background:var(--w);border-top:1px solid var(--bdr);padding:10px 0 14px;flex-shrink:0}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--tmut);font-size:10px;font-weight:600;transition:color .2s;font-family:inherit;padding:0 4px}
+.ni.on{color:var(--gold-d)}
+.ni svg{width:21px;height:21px}
+.sb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
+.sb::-webkit-scrollbar{display:none}
+.hdr{background:var(--navy);padding:20px 22px 26px;position:relative;overflow:hidden;flex-shrink:0}
+.hdr::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.08) 0%,transparent 70%)}
+.btn-back{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:7px 14px;color:#fff;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;transition:background .2s}
+.btn-back:hover{background:rgba(255,255,255,.17)}
+.scr-ttl{color:#fff;font-size:22px;font-weight:700;margin-bottom:2px}
+.scr-sub{color:var(--tmut);font-size:13px}
+.sec{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 10px}
+.sec h3{font-size:15px;font-weight:700;color:var(--td)}
+.sec-lnk{background:none;border:none;color:var(--gold-d);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit}
+.row-item{display:flex;align-items:center;gap:14px;padding:13px 20px;border-bottom:1px solid rgba(0,0,0,.04);cursor:pointer;transition:background .15s}
+.row-item:hover{background:var(--cream)}
+.ri-ic{width:46px;height:46px;border-radius:14px;display:flex;align-items:center;justify-content:center;font-size:20px;flex-shrink:0}
+.ri-in{flex:1;min-width:0}
+.ri-nm{font-size:14px;font-weight:600;color:var(--td);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.ri-sb{font-size:12px;color:var(--tmut);margin-top:1px}
+.ri-rt{text-align:right;flex-shrink:0}
+.ri-am{font-size:15px;font-weight:700}
+.amo{color:var(--td)}.ami{color:var(--teal)}
+.chip{display:inline-flex;align-items:center;padding:3px 9px;border-radius:20px;font-size:11px;font-weight:700}
+.cg{background:var(--teal-p);color:var(--teal)}
+.ca{background:var(--gold-p);color:var(--gold-d)}
+.crd{background:var(--cream);border-radius:16px;padding:16px;margin:0 20px 12px}
+.main-btn{display:block;width:calc(100% - 40px);margin:10px 20px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:none;border-radius:15px;padding:17px;color:var(--navy);font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
+.main-btn:hover{opacity:.9}
+.ghost-btn{display:block;width:calc(100% - 40px);margin:0 20px 10px;background:none;border:1.5px solid var(--bdr);border-radius:15px;padding:14px;color:var(--tm);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
+.inp{width:100%;padding:13px 15px;border-radius:12px;border:1.5px solid var(--bdr);background:var(--cream);color:var(--td);font-size:14px;font-family:inherit;outline:none;transition:border .2s}
+.inp:focus{border-color:var(--gold)}
+.lbl{font-size:11px;font-weight:700;color:var(--tmut);letter-spacing:.5px;text-transform:uppercase;margin-bottom:6px;display:block}
+.field{padding:0 20px 13px}
+.tgl{width:46px;height:27px;border-radius:14px;border:none;cursor:pointer;position:relative;flex-shrink:0;transition:background .25s}
+.tgl::after{content:'';position:absolute;top:3.5px;width:20px;height:20px;border-radius:50%;background:#fff;transition:left .25s;box-shadow:0 1px 3px rgba(0,0,0,.2)}
+.tgl.off{background:#CBD5DF}.tgl.off::after{left:3.5px}
+.tgl.on{background:var(--teal)}.tgl.on::after{left:22.5px}
+.stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;padding:0 20px 14px}
+.sc{background:var(--cream);border-radius:13px;padding:14px}
+.sl{font-size:11px;color:var(--tmut);margin-bottom:5px;font-weight:600;text-transform:uppercase;letter-spacing:.4px}
+.sv{font-size:19px;font-weight:700;color:var(--td)}
+.sv.pos{color:var(--teal)}.sv.warn{color:var(--gold-d)}
+.sdots{display:flex;justify-content:center;gap:8px;padding:10px 0 14px}
+.sdot{width:8px;height:8px;border-radius:50%;background:var(--cream-d);transition:all .3s}
+.sdot.done{background:var(--teal);width:22px;border-radius:4px}
+.sdot.cur{background:var(--gold)}
+.prog-w{padding:0 20px 4px}
+.prog-bg{height:5px;background:var(--cream-d);border-radius:3px}
+.prog-f{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--gold),var(--teal-l));transition:width .4s ease}
+.bars{display:flex;align-items:flex-end;gap:5px;height:88px;padding:0 2px}
+.bc{flex:1;display:flex;flex-direction:column;align-items:center;gap:3px;cursor:pointer}
+.bar{width:100%;border-radius:5px 5px 0 0;transition:height .4s ease}
+.bar:hover{opacity:.75}
+.blbl{font-size:10px;color:var(--tmut)}
+.bar-g{background:var(--gold)}.bar-t{background:var(--teal-l)}.bar-p{background:var(--cream-d)}
+.ct-scroll{display:flex;gap:10px;padding:4px 20px 14px;overflow-x:auto}
+.ct-scroll::-webkit-scrollbar{display:none}
+.ct{display:flex;flex-direction:column;align-items:center;gap:5px;cursor:pointer;flex-shrink:0}
+.av{width:52px;height:52px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:15px;border:2.5px solid transparent;transition:border-color .2s}
+.ct.sel .av{border-color:var(--gold)}
+.ct-n{font-size:10px;color:var(--tm);font-weight:600;text-align:center;max-width:58px;line-height:1.2}
+.numpad{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;padding:0 20px}
+.nb2{background:none;border:none;padding:14px;font-size:22px;font-weight:400;color:var(--td);cursor:pointer;border-radius:12px;font-family:inherit;transition:background .15s}
+.nb2:hover{background:var(--cream)}
+.nb2.del{font-size:16px;color:var(--tmut)}
+.modal-ov{display:none;position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(13,27,42,.52);z-index:50;align-items:flex-end}
+.modal-ov.open{display:flex}
+.modal-sh{background:var(--w);border-radius:24px 24px 0 0;width:100%;padding:22px 20px 30px;max-height:88%;overflow-y:auto}
+.modal-sh::-webkit-scrollbar{display:none}
+.dpill{width:36px;height:4px;background:var(--cream-d);border-radius:2px;margin:0 auto 18px}
+.m-ttl{font-size:18px;font-weight:700;color:var(--td);margin-bottom:3px}
+.m-sub{font-size:13px;color:var(--tmut);margin-bottom:18px}
+.cf-rows{background:var(--cream);border-radius:14px;padding:14px 16px;margin:0 20px 13px}
+.cfr{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid rgba(0,0,0,.05)}
+.cfr:last-child{border:none}
+.ck{font-size:13px;color:var(--tmut)}
+.cv{font-size:13px;font-weight:700;color:var(--td)}
+.warn-box{background:var(--red-p);border-radius:12px;padding:12px 14px;margin:0 20px 13px;display:flex;gap:10px;align-items:flex-start}
+.info-box{background:var(--teal-p);border-radius:12px;padding:12px 14px;display:flex;gap:10px;align-items:flex-start}
+.psv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:0 20px 16px}
+.psv{display:flex;flex-direction:column;align-items:center;gap:6px;padding:13px 6px;background:var(--cream);border-radius:14px;cursor:pointer;border:2px solid transparent;transition:all .2s;text-align:center}
+.psv:hover{border-color:var(--gold);background:var(--gold-p)}
+.psv-ic{font-size:22px;width:46px;height:46px;border-radius:13px;display:flex;align-items:center;justify-content:center}
+.psv-lb{font-size:11px;font-weight:700;color:var(--tm)}
+.date-sep{padding:10px 20px 3px;font-size:11px;font-weight:700;color:var(--tmut);letter-spacing:.5px;text-transform:uppercase}
+.noti-item{display:flex;gap:12px;padding:14px 20px;border-bottom:1px solid rgba(0,0,0,.04);cursor:pointer;transition:background .15s}
+.noti-item:hover{background:var(--cream)}
+.noti-item.unread{background:#FDFAF3}
+.ndot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:5px}
+.ndot.new{background:var(--gold)}.ndot.read{background:transparent;border:1.5px solid var(--cream-d)}
+.faq-it{margin:0 20px 8px;border:1px solid var(--bdr);border-radius:12px;overflow:hidden}
+.faq-q{padding:14px 16px;display:flex;justify-content:space-between;align-items:center;cursor:pointer;font-size:14px;font-weight:600;color:var(--td);background:var(--w)}
+.faq-a{padding:0 16px 14px;font-size:13px;color:var(--tm);line-height:1.6;display:none}
+.faq-a.open{display:block}
+.chev{color:var(--gold-d);transition:transform .2s;font-size:12px}
+.chev.open{transform:rotate(180deg)}
+.card-vis{background:linear-gradient(135deg,var(--navy-l),#2A4060,var(--navy-m));border:1px solid rgba(201,168,76,.28);border-radius:22px;padding:22px;margin:0 20px;position:relative;overflow:hidden;box-shadow:0 8px 28px rgba(13,27,42,.22)}
+.card-vis::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%)}
+.sav-wrap{display:flex;flex-direction:column;align-items:center;padding:20px 20px 8px}
+</style>
+
+<div class="app" id="APP">
+
+<!-- ═══ HOME ═══ -->
+<div class="scr on" id="s-home">
+  <div class="hdr">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
+      <div>
+        <div style="color:var(--gold-l);font-size:13px;margin-bottom:2px">Buenos días,</div>
+        <div style="color:#fff;font-size:21px;font-weight:700">Patrick Geordy</div>
+      </div>
+      <div style="position:relative">
+        <div onclick="go('s-profile')" style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:2.5px solid rgba(201,168,76,.4);color:var(--navy);font-weight:700;font-size:16px;display:flex;align-items:center;justify-content:center;cursor:pointer">PG</div>
+        <div onclick="event.stopPropagation();go('s-notif')" style="width:11px;height:11px;background:var(--red);border-radius:50%;position:absolute;top:-1px;right:-1px;border:2px solid var(--navy);cursor:pointer"></div>
+      </div>
+    </div>
+    <div style="color:var(--tmut);font-size:11px;letter-spacing:1px;text-transform:uppercase;margin-bottom:4px">Saldo disponible</div>
+    <div style="color:#fff;font-size:38px;font-weight:700;line-height:1">$2.845<span style="font-size:22px;color:var(--gold-l)">.000</span></div>
+    <div style="display:flex;align-items:center;gap:5px;margin-top:5px">
+      <svg width="12" height="12" viewBox="0 0 12 12"><path d="M6 9V3M6 3L3 6M6 3L9 6" stroke="#22A896" stroke-width="1.6" stroke-linecap="round"/></svg>
+      <span style="color:var(--teal-l);font-size:12px">+$180.000 este mes · 16 may 2026</span>
+    </div>
+    <div onclick="go('s-cards')" style="margin-top:14px;background:rgba(255,255,255,.07);border:1px solid rgba(201,168,76,.2);border-radius:14px;padding:12px 16px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:background .2s" onmouseover="this.style.background='rgba(255,255,255,.11)'" onmouseout="this.style.background='rgba(255,255,255,.07)'">
+      <div style="display:flex;align-items:center;gap:12px">
+        <div style="width:34px;height:24px;background:linear-gradient(135deg,var(--gold),#A8892A);border-radius:5px"></div>
+        <div><div style="color:rgba(255,255,255,.5);font-size:13px;letter-spacing:2px">•••• •••• •••• 4821</div><div style="color:var(--gold-l);font-size:10px;font-weight:700;letter-spacing:.8px">CUENTA CORRIENTE</div></div>
+      </div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="rgba(201,168,76,.6)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+  </div>
+  <div class="sb">
+    <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:18px 16px 0">
+      <button class="ni" style="padding:12px 4px;border-radius:14px;gap:7px;color:var(--tm)" onclick="go('s-send')">
+        <div style="width:50px;height:50px;border-radius:15px;background:#E6F5F3;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M13 6l5 5-5 5" stroke="#1B7A6E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span style="font-size:10px;font-weight:600;text-align:center;line-height:1.2">Enviar dinero</span>
+      </button>
+      <button class="ni" style="padding:12px 4px;border-radius:14px;gap:7px;color:var(--tm)" onclick="go('s-receive')">
+        <div style="width:50px;height:50px;border-radius:15px;background:#EEF2F7;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M18 11H4M9 16l-5-5 5-5" stroke="#2C4A82" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <span style="font-size:10px;font-weight:600;text-align:center;line-height:1.2">Recibir pago</span>
+      </button>
+      <button class="ni" style="padding:12px 4px;border-radius:14px;gap:7px;color:var(--tm)" onclick="go('s-pay')">
+        <div style="width:50px;height:50px;border-radius:15px;background:var(--gold-p);display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="#8B6914" stroke-width="1.6"/><path d="M2 9h18" stroke="#8B6914" stroke-width="1.6"/><circle cx="6.5" cy="14" r="1.2" fill="#8B6914"/></svg></div>
+        <span style="font-size:10px;font-weight:600;text-align:center;line-height:1.2">Pagar servicios</span>
+      </button>
+      <button class="ni" style="padding:12px 4px;border-radius:14px;gap:7px;color:var(--tm)" onclick="go('s-savings')">
+        <div style="width:50px;height:50px;border-radius:15px;background:#F0E8F7;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.3 1.3 4.3 3.2 5.3L10 16h4l.8-2.7C16.7 12.3 18 10.3 18 8c0-3.3-2.7-6-6-6z" stroke="#6B2C82" stroke-width="1.6" fill="none"/><path d="M9.5 16h5M9 19h6" stroke="#6B2C82" stroke-width="1.6" stroke-linecap="round"/></svg></div>
+        <span style="font-size:10px;font-weight:600;text-align:center;line-height:1.2">Mis ahorros</span>
+      </button>
+    </div>
+    <div onclick="go('s-notif')" style="margin:16px 20px 0;background:var(--navy);border-radius:14px;padding:13px 16px;display:flex;gap:12px;align-items:flex-start;cursor:pointer">
+      <div style="width:8px;height:8px;border-radius:50%;background:var(--gold);flex-shrink:0;margin-top:3px"></div>
+      <div style="font-size:13px;color:var(--gold-l);line-height:1.5;flex:1">Su pensión de <strong style="color:var(--gold)">$1.200.000</strong> fue acreditada ayer. Toque para ver.</div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none" style="flex-shrink:0;margin-top:1px"><path d="M5 3l4 4-4 4" stroke="rgba(201,168,76,.5)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="sec"><h3>Gastos — Mayo 2026</h3><button class="sec-lnk" onclick="go('s-history')">Ver todos</button></div>
+    <div style="padding:0 20px 14px">
+      <div class="crd" style="margin:0">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:12px">
+          <span style="font-size:13px;font-weight:700;color:var(--td)">Movimientos semanales</span>
+          <div style="display:flex;gap:2px" id="chart-tabs">
+            <button onclick="switchP(this,'sem')" style="padding:5px 9px;border-radius:8px;background:var(--w);color:var(--td);font-size:11px;font-weight:700;border:none;cursor:pointer;font-family:inherit;box-shadow:0 1px 3px rgba(0,0,0,.07)">Sem</button>
+            <button onclick="switchP(this,'mes')" style="padding:5px 9px;border-radius:8px;background:none;color:var(--tmut);font-size:11px;font-weight:700;border:none;cursor:pointer;font-family:inherit">Mes</button>
+            <button onclick="switchP(this,'año')" style="padding:5px 9px;border-radius:8px;background:none;color:var(--tmut);font-size:11px;font-weight:700;border:none;cursor:pointer;font-family:inherit">Año</button>
+          </div>
+        </div>
+        <div class="bars" id="BARS">
+          <div class="bc"><div class="bar bar-p" style="height:42px" onclick="showTip('$84.000')"></div><span class="blbl">L</span></div>
+          <div class="bc"><div class="bar bar-p" style="height:60px" onclick="showTip('$120.000')"></div><span class="blbl">M</span></div>
+          <div class="bc"><div class="bar bar-p" style="height:32px" onclick="showTip('$64.000')"></div><span class="blbl">X</span></div>
+          <div class="bc"><div class="bar bar-g" style="height:85px" onclick="showTip('$170.000')"></div><span class="blbl">J</span></div>
+          <div class="bc"><div class="bar bar-p" style="height:55px" onclick="showTip('$110.000')"></div><span class="blbl">V</span></div>
+          <div class="bc"><div class="bar bar-t" style="height:88px" onclick="showTip('$176.000 — Pensión')"></div><span class="blbl">S</span></div>
+          <div class="bc"><div class="bar bar-p" style="height:20px" onclick="showTip('$40.000')"></div><span class="blbl">D</span></div>
+        </div>
+        <div id="bar-tip" style="text-align:center;font-size:12px;color:var(--tmut);min-height:18px;padding:3px 0;font-weight:600"></div>
+        <div style="display:flex;gap:14px;margin-top:4px">
+          <div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:10px;border-radius:2px;background:var(--gold)"></div><span style="font-size:11px;color:var(--tmut)">Gastos</span></div>
+          <div style="display:flex;align-items:center;gap:4px"><div style="width:10px;height:10px;border-radius:2px;background:var(--teal-l)"></div><span style="font-size:11px;color:var(--tmut)">Ingresos</span></div>
+          <div style="margin-left:auto;font-size:11px;color:var(--tmut)">Total: <strong style="color:var(--td)">$588.000</strong></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;padding:0 20px 14px">
+      <div class="sc"><div class="sl">Ingresos</div><div class="sv pos" style="font-size:16px">$1.500k</div></div>
+      <div class="sc"><div class="sl">Gastos</div><div class="sv warn" style="font-size:16px">$262k</div></div>
+      <div class="sc"><div class="sl">Ahorro neto</div><div class="sv" style="font-size:16px">$1.238k</div></div>
+    </div>
+    <div class="sec"><h3>Últimos movimientos</h3><button class="sec-lnk" onclick="go('s-history')">Ver más</button></div>
+    <div class="row-item" onclick="setTxn('Droguería Cruz Verde','Salud','Hoy, 8:30 a.m.','-$45.000','out','💊','#E8F7EE');go('s-txn')">
+      <div class="ri-ic" style="background:#E8F7EE">💊</div>
+      <div class="ri-in"><div class="ri-nm">Droguería Cruz Verde</div><div class="ri-sb">Hoy, 8:30 a.m. · Salud</div></div>
+      <div class="ri-rt"><div class="ri-am amo">−$45.000</div><div style="margin-top:2px"><span class="chip cg">✓ Listo</span></div></div>
+    </div>
+    <div class="row-item" onclick="setTxn('Pensión Porvenir','Ingreso','Ayer, 12:00 p.m.','+$1.200.000','in','🏦','var(--gold-p)');go('s-txn')">
+      <div class="ri-ic" style="background:var(--gold-p)">🏦</div>
+      <div class="ri-in"><div class="ri-nm">Pensión Porvenir</div><div class="ri-sb">Ayer, 12:00 p.m. · Ingreso</div></div>
+      <div class="ri-rt"><div class="ri-am ami">+$1.200.000</div><div style="margin-top:2px"><span class="chip cg">✓ Listo</span></div></div>
+    </div>
+    <div class="row-item" onclick="setTxn('EPM Servicios','Servicios','14 may','-$89.500','out','💡','#EEF2F7');go('s-txn')">
+      <div class="ri-ic" style="background:#EEF2F7">💡</div>
+      <div class="ri-in"><div class="ri-nm">EPM Servicios</div><div class="ri-sb">14 may · Servicios</div></div>
+      <div class="ri-rt"><div class="ri-am amo">−$89.500</div><div style="margin-top:2px"><span class="chip cg">✓ Listo</span></div></div>
+    </div>
+    <div class="row-item" onclick="setTxn('Éxito Supertiendas','Alimentación','13 may','-$127.300','out','🛒','#FDF0E8');go('s-txn')">
+      <div class="ri-ic" style="background:#FDF0E8">🛒</div>
+      <div class="ri-in"><div class="ri-nm">Éxito Supertiendas</div><div class="ri-sb">13 may · Alimentación</div></div>
+      <div class="ri-rt"><div class="ri-am amo">−$127.300</div><div style="margin-top:2px"><span class="chip cg">✓ Listo</span></div></div>
+    </div>
+    <div class="row-item" onclick="setTxn('Carlos Soriano','Transferencia recibida','12 may','+$300.000','in','👤','#E8EDF7');go('s-txn')">
+      <div class="ri-ic" style="background:#E8EDF7">👤</div>
+      <div class="ri-in"><div class="ri-nm">Transferencia recibida</div><div class="ri-sb">12 may · Carlos Soriano</div></div>
+      <div class="ri-rt"><div class="ri-am ami">+$300.000</div><div style="margin-top:2px"><span class="chip cg">✓ Listo</span></div></div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+  <nav class="nb">
+    <button class="ni on" onclick="go('s-home')"><svg viewBox="0 0 22 22" fill="none"><path d="M3 9.5L11 3l8 6.5V19a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="1.5"/></svg>Inicio</button>
+    <button class="ni" onclick="go('s-cards')"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 9h18" stroke="currentColor" stroke-width="1.5"/></svg>Tarjetas</button>
+    <button class="ni" onclick="go('s-send')"><div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 14px rgba(201,168,76,.4)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Enviar</button>
+    <button class="ni" onclick="go('s-savings')"><svg viewBox="0 0 22 22" fill="none"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.3 1.3 4.3 3.2 5.3L10 16h4l.8-2.7C16.7 12.3 18 10.3 18 8c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9.5 16h5M9 19h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ahorros</button>
+    <button class="ni" onclick="go('s-help')"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="14.5" r=".9" fill="currentColor"/></svg>Ayuda</button>
+  </nav>
+</div>
+
+<!-- ═══ PROFILE ═══ -->
+<div class="scr" id="s-profile">
+  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Mi perfil</div><div class="scr-sub">Información de su cuenta</div></div>
+  <div class="sb">
+    <div style="text-align:center;padding:24px 20px 20px">
+      <div style="width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:inline-flex;align-items:center;justify-content:center;color:var(--navy);font-weight:700;font-size:26px;margin-bottom:12px;border:3px solid rgba(201,168,76,.25)">PG</div>
+      <div style="font-size:20px;font-weight:700;color:var(--td)">Patrick Geordy Martinez Pulido</div>
+    </div>
+    <div class="cf-rows">
+      <div class="cfr"><span class="ck">Número de cuenta</span><span class="cv">•••• •••• 4821</span></div>
+      <div class="cfr"><span class="ck">Tipo de cuenta</span><span class="cv">Cuenta corriente</span></div>
+      <div class="cfr"><span class="ck">Entidad</span><span class="cv">SeniorBank</span></div>
+      <div class="cfr"><span class="ck">Saldo disponible</span><span class="cv" style="color:var(--teal)">$2.845.000</span></div>
+      <div class="cfr"><span class="ck">Correo electrónico</span><span class="cv">pgmartinez@correo.com</span></div>
+      <div class="cfr"><span class="ck">Celular registrado</span><span class="cv">317 ••• 1000</span></div>
+    </div>
+    <div class="sec"><h3>Contactos guardados</h3><button class="sec-lnk" onclick="openM('m-newct')">+ Agregar</button></div>
+    <div class="row-item" onclick="selCt2('Omiara Martinez Pinto','OM','#E8EDF7','#2C4A82');go('s-send')">
+      <div style="width:44px;height:44px;border-radius:50%;background:#E8EDF7;display:flex;align-items:center;justify-content:center;color:#2C4A82;font-weight:700;font-size:14px;flex-shrink:0">OM</div>
+      <div class="ri-in"><div class="ri-nm">Omiara Martinez Pinto</div><div class="ri-sb">Toque para enviar dinero</div></div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="var(--tmut)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="row-item" onclick="selCt2('Carlos Andres Soriano Gonzalez','CS','#E8F7EE','#1B7A6E');go('s-send')">
+      <div style="width:44px;height:44px;border-radius:50%;background:#E8F7EE;display:flex;align-items:center;justify-content:center;color:#1B7A6E;font-weight:700;font-size:14px;flex-shrink:0">CS</div>
+      <div class="ri-in"><div class="ri-nm">Carlos Andres Soriano Gonzalez</div><div class="ri-sb">Toque para enviar dinero</div></div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="var(--tmut)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="row-item" onclick="selCt2('Caterin Castro Perez','CC','#F7EDE8','#82402C');go('s-send')">
+      <div style="width:44px;height:44px;border-radius:50%;background:#F7EDE8;display:flex;align-items:center;justify-content:center;color:#82402C;font-weight:700;font-size:14px;flex-shrink:0">CC</div>
+      <div class="ri-in"><div class="ri-nm">Caterin Castro Perez</div><div class="ri-sb">Toque para enviar dinero</div></div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="var(--tmut)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="row-item" onclick="selCt2('Jessica Paola Fernandez Pena','JF','#F0E8F7','#6B2C82');go('s-send')">
+      <div style="width:44px;height:44px;border-radius:50%;background:#F0E8F7;display:flex;align-items:center;justify-content:center;color:#6B2C82;font-weight:700;font-size:14px;flex-shrink:0">JF</div>
+      <div class="ri-in"><div class="ri-nm">Jessica Paola Fernandez Pena</div><div class="ri-sb">Toque para enviar dinero</div></div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="var(--tmut)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ═══ SEND ═══ -->
+<div class="scr" id="s-send">
+  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Enviar dinero</div><div class="scr-sub">Seleccione destinatario e ingrese el valor</div></div>
+  <div class="sb">
+    <div class="sdots"><div class="sdot done"></div><div class="sdot cur"></div><div class="sdot"></div></div>
+    <div class="sec" style="padding-top:4px"><h3>Contactos frecuentes</h3><button class="sec-lnk" onclick="openM('m-newct')">+ Nuevo</button></div>
+    <div class="ct-scroll">
+      <div class="ct sel" onclick="selCt(this,'Omiara Martinez Pinto','OM','#E8EDF7','#2C4A82')"><div class="av" style="background:#E8EDF7;color:#2C4A82">OM</div><span class="ct-n">Omiara Martinez</span></div>
+      <div class="ct" onclick="selCt(this,'Carlos Andres Soriano Gonzalez','CS','#E8F7EE','#1B7A6E')"><div class="av" style="background:#E8F7EE;color:#1B7A6E">CS</div><span class="ct-n">Carlos Soriano</span></div>
+      <div class="ct" onclick="selCt(this,'Caterin Castro Perez','CC','#F7EDE8','#82402C')"><div class="av" style="background:#F7EDE8;color:#82402C">CC</div><span class="ct-n">Caterin Castro</span></div>
+      <div class="ct" onclick="selCt(this,'Jessica Paola Fernandez Pena','JF','#F0E8F7','#6B2C82')"><div class="av" style="background:#F0E8F7;color:#6B2C82">JF</div><span class="ct-n">Jessica Fernandez</span></div>
+      <div class="ct" onclick="openM('m-newct')"><div class="av" style="background:var(--cream-d);color:var(--tmut);font-size:22px;font-weight:300">+</div><span class="ct-n">Nuevo contacto</span></div>
+    </div>
+    <div id="ct-lbl" style="text-align:center;padding:0 20px 4px;min-height:24px"><span style="display:inline-flex;align-items:center;gap:5px;background:var(--teal-p);padding:4px 12px;border-radius:20px;font-size:12px;color:var(--teal);font-weight:700">Enviando a: Omiara Martinez Pinto</span></div>
+    <div style="text-align:center;padding:16px 20px 6px">
+      <div style="color:var(--tmut);font-size:13px;margin-bottom:5px">¿Cuánto desea enviar?</div>
+      <div style="font-size:46px;font-weight:700;color:var(--td);line-height:1"><span style="font-size:24px;color:var(--gold-d)">$</span><span id="SA">0</span></div>
+    </div>
+    <div class="prog-w">
+      <div class="prog-bg"><div class="prog-f" id="SP" style="width:0%"></div></div>
+      <div style="display:flex;justify-content:space-between;padding:3px 0;font-size:10px;color:var(--tmut)"><span>$0</span><span>Límite diario: $5.000.000</span></div>
+    </div>
+    <div class="numpad">
+      <button class="nb2" onclick="an('1')">1</button><button class="nb2" onclick="an('2')">2</button><button class="nb2" onclick="an('3')">3</button>
+      <button class="nb2" onclick="an('4')">4</button><button class="nb2" onclick="an('5')">5</button><button class="nb2" onclick="an('6')">6</button>
+      <button class="nb2" onclick="an('7')">7</button><button class="nb2" onclick="an('8')">8</button><button class="nb2" onclick="an('9')">9</button>
+      <button class="nb2" onclick="an('000')">000</button><button class="nb2" onclick="an('0')">0</button><button class="nb2 del" onclick="dn()">⌫</button>
+    </div>
+    <button class="main-btn" onclick="go('s-confirm')">Continuar — Revisar envío →</button>
+    <div style="text-align:center;padding:0 20px 20px;color:var(--tmut);font-size:12px;line-height:1.6">🔒 Cifrado bancario · Puede cancelar antes de confirmar</div>
+  </div>
+</div>
+
+<!-- ═══ CONFIRM ═══ -->
+<div class="scr" id="s-confirm">
+  <div class="hdr"><button class="btn-back" onclick="go('s-send')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Corregir</button><div class="scr-ttl">Revisar envío</div><div class="scr-sub">Verifique todos los datos con calma</div></div>
+  <div class="sb">
+    <div class="sdots"><div class="sdot done"></div><div class="sdot done"></div><div class="sdot cur"></div></div>
+    <div style="text-align:center;padding:18px 20px 14px">
+      <div id="CF-AV" style="width:64px;height:64px;border-radius:50%;background:#E8EDF7;display:inline-flex;align-items:center;justify-content:center;font-size:20px;font-weight:700;color:#2C4A82;margin-bottom:10px">OM</div>
+      <div id="CF-NM" style="font-size:17px;font-weight:700;color:var(--td)">Omiara Martinez Pinto</div>
+      <div style="font-size:13px;color:var(--tmut)">Contacto verificado</div>
+    </div>
+    <div class="cf-rows">
+      <div class="cfr"><span class="ck">Valor a enviar</span><span class="cv" id="CF-AMT" style="font-size:19px;color:var(--teal)">$0</span></div>
+      <div class="cfr"><span class="ck">Comisión</span><span class="cv">$0 — Sin cobro</span></div>
+      <div class="cfr"><span class="ck">Fecha y hora</span><span class="cv">16 may 2026, 9:41 a.m.</span></div>
+      <div class="cfr"><span class="ck">Saldo resultante</span><span class="cv" id="CF-REM">$2.845.000</span></div>
+    </div>
+    <div class="warn-box">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none" style="flex-shrink:0;margin-top:1px"><circle cx="7.5" cy="7.5" r="6.5" stroke="#C94B4B" stroke-width="1.2"/><path d="M7.5 4.5v4M7.5 11v.5" stroke="#C94B4B" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <p style="font-size:12px;color:#7A2525;line-height:1.5">Verifique que el destinatario sea correcto. Una vez confirmado, el envío no puede revertirse automáticamente.</p>
+    </div>
+    <button class="main-btn" onclick="go('s-success')">✓ Confirmar y enviar ahora</button>
+    <button class="ghost-btn" onclick="go('s-send')">Cancelar esta operación</button>
+    <div style="height:16px"></div>
+  </div>
+</div>
+
+<!-- ═══ SUCCESS ═══ -->
+<div class="scr" id="s-success">
+  <div style="height:20px;background:var(--navy)"></div>
+  <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px">
+    <div style="width:88px;height:88px;border-radius:50%;background:var(--teal-p);border:3px solid var(--teal-l);display:flex;align-items:center;justify-content:center;margin-bottom:18px"><svg width="42" height="42" viewBox="0 0 42 42" fill="none"><path d="M10 21l7 8L32 14" stroke="#1B7A6E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+    <div style="font-size:26px;font-weight:700;color:var(--td);margin-bottom:5px">¡Envío exitoso!</div>
+    <div style="font-size:14px;color:var(--tmut);text-align:center;line-height:1.6;margin-bottom:22px">Su dinero fue enviado correctamente a <strong id="SC-NM">Omiara Martinez Pinto</strong>.<br>Recibirá una notificación de confirmación.</div>
+    <div class="cf-rows" style="width:100%;margin:0 0 14px">
+      <div class="cfr"><span class="ck">Monto enviado</span><span class="cv" id="SC-AMT" style="color:var(--teal)">$0</span></div>
+      <div class="cfr"><span class="ck">Destinatario</span><span class="cv" id="SC-NM2">Omiara Martinez Pinto</span></div>
+      <div class="cfr"><span class="ck">Referencia</span><span class="cv">#TXN-20260516-8821</span></div>
+      <div class="cfr"><span class="ck">Estado</span><span class="cv"><span class="chip cg">✓ Completado</span></span></div>
+    </div>
+    <div style="display:flex;gap:10px;width:100%">
+      <button style="flex:1;padding:14px;background:var(--cream);border:1.5px solid var(--bdr);border-radius:14px;color:var(--tm);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit" onclick="alert('Comprobante guardado como PDF')">Guardar PDF</button>
+      <button class="main-btn" style="flex:1;margin:0" onclick="go('s-home')">Ir al inicio</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ RECEIVE ═══ -->
+<div class="scr" id="s-receive">
+  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Recibir pago</div><div class="scr-sub">Comparta su código QR o número</div></div>
+  <div class="sb" style="display:flex;flex-direction:column;align-items:center;padding:20px">
+    <div style="background:var(--cream);border-radius:20px;padding:22px;text-align:center;width:100%;margin-bottom:14px">
+      <div style="width:160px;height:160px;background:var(--w);border-radius:12px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;border:1px solid var(--bdr)">
+        <svg width="132" height="132" viewBox="0 0 132 132">
+          <rect x="8" y="8" width="36" height="36" rx="4" fill="var(--navy)"/><rect x="14" y="14" width="24" height="24" rx="2" fill="var(--w)"/><rect x="18" y="18" width="16" height="16" rx="1" fill="var(--navy)"/>
+          <rect x="88" y="8" width="36" height="36" rx="4" fill="var(--navy)"/><rect x="94" y="14" width="24" height="24" rx="2" fill="var(--w)"/><rect x="98" y="18" width="16" height="16" rx="1" fill="var(--navy)"/>
+          <rect x="8" y="88" width="36" height="36" rx="4" fill="var(--navy)"/><rect x="14" y="94" width="24" height="24" rx="2" fill="var(--w)"/><rect x="18" y="98" width="16" height="16" rx="1" fill="var(--navy)"/>
+          <rect x="52" y="8" width="6" height="6" fill="var(--navy)"/><rect x="62" y="8" width="6" height="6" fill="var(--navy)"/><rect x="72" y="8" width="6" height="6" fill="var(--navy)"/>
+          <rect x="52" y="18" width="6" height="6" fill="var(--navy)"/><rect x="72" y="18" width="6" height="6" fill="var(--navy)"/>
+          <rect x="52" y="28" width="6" height="6" fill="var(--navy)"/><rect x="62" y="28" width="6" height="6" fill="var(--navy)"/><rect x="72" y="28" width="6" height="6" fill="var(--navy)"/>
+          <rect x="8" y="52" width="6" height="6" fill="var(--navy)"/><rect x="18" y="52" width="6" height="6" fill="var(--navy)"/><rect x="28" y="52" width="6" height="6" fill="var(--navy)"/><rect x="52" y="52" width="6" height="6" fill="var(--navy)"/><rect x="62" y="52" width="6" height="6" fill="var(--navy)"/><rect x="72" y="52" width="6" height="6" fill="var(--navy)"/><rect x="82" y="52" width="6" height="6" fill="var(--navy)"/><rect x="102" y="52" width="6" height="6" fill="var(--navy)"/><rect x="118" y="52" width="6" height="6" fill="var(--navy)"/>
+          <rect x="8" y="62" width="6" height="6" fill="var(--navy)"/><rect x="28" y="62" width="6" height="6" fill="var(--navy)"/><rect x="52" y="62" width="6" height="6" fill="var(--navy)"/><rect x="72" y="62" width="6" height="6" fill="var(--navy)"/><rect x="92" y="62" width="6" height="6" fill="var(--navy)"/><rect x="112" y="62" width="6" height="6" fill="var(--navy)"/>
+          <rect x="8" y="72" width="6" height="6" fill="var(--navy)"/><rect x="18" y="72" width="6" height="6" fill="var(--navy)"/><rect x="28" y="72" width="6" height="6" fill="var(--navy)"/><rect x="52" y="72" width="6" height="6" fill="var(--navy)"/><rect x="62" y="72" width="6" height="6" fill="var(--navy)"/><rect x="82" y="72" width="6" height="6" fill="var(--navy)"/><rect x="102" y="72" width="6" height="6" fill="var(--navy)"/><rect x="118" y="72" width="6" height="6" fill="var(--navy)"/>
+          <rect x="52" y="88" width="6" height="6" fill="var(--navy)"/><rect x="72" y="88" width="6" height="6" fill="var(--navy)"/><rect x="92" y="88" width="6" height="6" fill="var(--navy)"/>
+          <rect x="52" y="98" width="6" height="6" fill="var(--navy)"/><rect x="62" y="98" width="6" height="6" fill="var(--navy)"/><rect x="82" y="98" width="6" height="6" fill="var(--navy)"/><rect x="102" y="98" width="6" height="6" fill="var(--navy)"/>
+          <rect x="52" y="108" width="6" height="6" fill="var(--navy)"/><rect x="72" y="108" width="6" height="6" fill="var(--navy)"/><rect x="118" y="108" width="6" height="6" fill="var(--navy)"/>
+          <rect x="52" y="118" width="6" height="6" fill="var(--navy)"/><rect x="62" y="118" width="6" height="6" fill="var(--navy)"/><rect x="82" y="118" width="6" height="6" fill="var(--navy)"/><rect x="102" y="118" width="6" height="6" fill="var(--navy)"/>
+        </svg>
+      </div>
+      <div style="font-size:16px;font-weight:700;color:var(--td)">Patrick Geordy Martinez Pulido</div>
+      <div style="font-family:monospace;font-size:16px;font-weight:700;color:var(--navy);letter-spacing:2px;background:var(--w);padding:8px 16px;border-radius:8px;display:inline-block;margin:8px 0">317 482 1000</div>
+      <div style="font-size:12px;color:var(--tmut)">Cuenta Corriente •••• 4821</div>
+    </div>
+    <div style="display:flex;gap:10px;width:100%;margin-bottom:12px">
+      <button class="main-btn" style="margin:0;flex:1" onclick="alert('Código compartido correctamente')">Compartir código</button>
+      <button class="ghost-btn" style="margin:0;width:auto;padding:14px 16px;flex-shrink:0" onclick="alert('Imagen guardada en galería')">Guardar</button>
+    </div>
+    <div class="info-box" style="width:100%;margin:0">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6.5" stroke="#1B7A6E" stroke-width="1.2"/><path d="M7.5 5v4.5M7.5 11v.5" stroke="#1B7A6E" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <p style="font-size:12px;color:var(--teal);line-height:1.5">Solo comparta este código con personas de confianza. SeniorBank nunca le pedirá su clave por mensaje.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ PAY ═══ -->
+<div class="scr" id="s-pay">
+  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Pagar servicios</div><div class="scr-sub">Seleccione el servicio a pagar</div></div>
+  <div class="sb">
+    <div class="sec"><h3>Servicios disponibles</h3></div>
+    <div class="psv-grid">
+      <div class="psv" onclick="openPayD('Energía EPM','$89.500','20 mayo 2026','💡','#FFF9E6')"><div class="psv-ic" style="background:#FFF9E6">💡</div><span class="psv-lb">Energía</span></div>
+      <div class="psv" onclick="openPayD('Agua EAAB','$45.200','25 mayo 2026','💧','#E6F3FF')"><div class="psv-ic" style="background:#E6F3FF">💧</div><span class="psv-lb">Agua</span></div>
+      <div class="psv" onclick="openPayD('Gas Natural','$38.700','22 mayo 2026','🔥','#FFF0E6')"><div class="psv-ic" style="background:#FFF0E6">🔥</div><span class="psv-lb">Gas</span></div>
+      <div class="psv" onclick="openPayD('Internet Claro','$65.000','28 mayo 2026','📶','var(--teal-p)')"><div class="psv-ic" style="background:var(--teal-p)">📶</div><span class="psv-lb">Internet</span></div>
+      <div class="psv" onclick="openPayD('Celular Movistar','$28.500','30 mayo 2026','📱','#F0E8F7')"><div class="psv-ic" style="background:#F0E8F7">📱</div><span class="psv-lb">Celular</span></div>
+      <div class="psv" onclick="openPayD('EPS Sura','Al día','Al día','🏥','var(--teal-p)')"><div class="psv-ic" style="background:var(--teal-p)">🏥</div><span class="psv-lb">EPS / Salud</span></div>
+      <div class="psv" onclick="openPayD('TV Cable','$52.000','18 mayo 2026','📺','#E8EDF7')"><div class="psv-ic" style="background:#E8EDF7">📺</div><span class="psv-lb">TV Cable</span></div>
+      <div class="psv" onclick="openPayD('Administración','$120.000','15 mayo 2026','🏢','#F7EDE8')"><div class="psv-ic" style="background:#F7EDE8">🏢</div><span class="psv-lb">Admón.</span></div>
+      <div class="psv" onclick="openM('m-newpay')"><div class="psv-ic" style="background:var(--cream-d);font-size:20px;color:var(--tmut)">+</div><span class="psv-lb">Otro</span></div>
+    </div>
+    <div class="sec"><h3>Pagos recientes</h3></div>
+    <div class="row-item" onclick="openPayD('Energía EPM','$89.500','20 mayo 2026','💡','#FFF9E6')">
+      <div class="ri-ic" style="background:#FFF9E6">💡</div>
+      <div class="ri-in"><div class="ri-nm">Energía EPM</div><div class="ri-sb">Vence 20 may</div></div>
+      <div class="ri-rt"><div class="ri-am" style="color:var(--gold-d)">$89.500</div><div style="margin-top:2px"><span class="chip ca">Pendiente</span></div></div>
+    </div>
+    <div class="row-item" onclick="openPayD('Agua EAAB','$45.200','Pagado','💧','#E6F3FF')">
+      <div class="ri-ic" style="background:#E6F3FF">💧</div>
+      <div class="ri-in"><div class="ri-nm">Agua EAAB</div><div class="ri-sb">5 mayo · Pagado</div></div>
+      <div class="ri-rt"><div class="ri-am amo">$45.200</div><div style="margin-top:2px"><span class="chip cg">✓ Listo</span></div></div>
+    </div>
+    <div class="row-item" onclick="openPayD('Internet Claro','$65.000','28 mayo 2026','📶','var(--teal-p)')">
+      <div class="ri-ic" style="background:var(--teal-p)">📶</div>
+      <div class="ri-in"><div class="ri-nm">Internet Claro</div><div class="ri-sb">Vence 28 may</div></div>
+      <div class="ri-rt"><div class="ri-am" style="color:var(--gold-d)">$65.000</div><div style="margin-top:2px"><span class="chip ca">Pendiente</span></div></div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ═══ SAVINGS ═══ -->
+<div class="scr" id="s-savings">
+  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Mis ahorros</div><div class="scr-sub">Control de sus metas de ahorro</div></div>
+  <div class="sb">
+    <div class="sav-wrap">
+      <div style="position:relative;width:130px;height:130px;margin-bottom:14px">
+        <svg width="130" height="130" viewBox="0 0 130 130">
+          <circle cx="65" cy="65" r="52" fill="none" stroke="var(--cream-d)" stroke-width="13"/>
+          <circle cx="65" cy="65" r="52" fill="none" stroke="var(--gold)" stroke-width="13" stroke-dasharray="245 81" stroke-dashoffset="24" stroke-linecap="round"/>
+          <circle cx="65" cy="65" r="52" fill="none" stroke="var(--teal-l)" stroke-width="13" stroke-dasharray="81 245" stroke-dashoffset="-221" stroke-linecap="round"/>
+        </svg>
+        <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);font-size:22px;font-weight:700;color:var(--td)">75%</div>
+      </div>
+      <div style="font-size:22px;font-weight:700;color:var(--td)">$1.500.000</div>
+      <div style="font-size:13px;color:var(--tmut);margin-bottom:10px">de $2.000.000 meta anual</div>
+      <div style="display:flex;gap:16px">
+        <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:var(--gold)"></div><span style="font-size:12px;color:var(--tmut)">Ahorrado 75%</span></div>
+        <div style="display:flex;align-items:center;gap:5px"><div style="width:10px;height:10px;border-radius:50%;background:var(--teal-l)"></div><span style="font-size:12px;color:var(--tmut)">Restante 25%</span></div>
+      </div>
+    </div>
+    <div class="stat-grid">
+      <div class="sc"><div class="sl">Ahorro mensual</div><div class="sv pos">$180.000</div></div>
+      <div class="sc"><div class="sl">Rendimiento</div><div class="sv pos">+2.1%</div></div>
+      <div class="sc"><div class="sl">Días restantes</div><div class="sv">228</div></div>
+      <div class="sc"><div class="sl">Proyección dic.</div><div class="sv">$1.980k</div></div>
+    </div>
+    <div class="sec"><h3>Metas de ahorro</h3><button class="sec-lnk" onclick="openM('m-meta')">+ Nueva meta</button></div>
+    <div class="crd" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div><div style="font-size:14px;font-weight:700;color:var(--td)">Viaje familiar</div><div style="font-size:12px;color:var(--tmut)">Meta: $500.000</div></div>
+        <span class="chip cg">68%</span>
+      </div>
+      <div class="prog-bg"><div class="prog-f" style="width:68%"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--tmut)"><span>$340.000 ahorrado</span><span>Faltan $160.000</span></div>
+    </div>
+    <div class="crd" style="margin-bottom:10px">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px">
+        <div><div style="font-size:14px;font-weight:700;color:var(--td)">Emergencias médicas</div><div style="font-size:12px;color:var(--tmut)">Meta: $1.000.000</div></div>
+        <span class="chip ca">42%</span>
+      </div>
+      <div class="prog-bg"><div class="prog-f" style="width:42%;background:var(--gold)"></div></div>
+      <div style="display:flex;justify-content:space-between;margin-top:6px;font-size:12px;color:var(--tmut)"><span>$420.000 ahorrado</span><span>Faltan $580.000</span></div>
+    </div>
+    <button class="main-btn" onclick="openM('m-deposit')">Abonar a mis ahorros</button>
+    <div style="height:20px"></div>
+  </div>
+  <nav class="nb">
+    <button class="ni" onclick="go('s-home')"><svg viewBox="0 0 22 22" fill="none"><path d="M3 9.5L11 3l8 6.5V19a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="1.5"/></svg>Inicio</button>
+    <button class="ni" onclick="go('s-cards')"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 9h18" stroke="currentColor" stroke-width="1.5"/></svg>Tarjetas</button>
+    <button class="ni" onclick="go('s-send')"><div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 14px rgba(201,168,76,.4)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Enviar</button>
+    <button class="ni on"><svg viewBox="0 0 22 22" fill="none"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.3 1.3 4.3 3.2 5.3L10 16h4l.8-2.7C16.7 12.3 18 10.3 18 8c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9.5 16h5M9 19h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ahorros</button>
+    <button class="ni" onclick="go('s-help')"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="14.5" r=".9" fill="currentColor"/></svg>Ayuda</button>
+  </nav>
+</div>
+
+<!-- ═══ CARDS ═══ -->
+<div class="scr" id="s-cards">
+  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Mis tarjetas</div><div class="scr-sub">Gestione su tarjeta y seguridad</div></div>
+  <div class="sb">
+    <div class="card-vis">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:26px">
+        <div style="width:38px;height:28px;background:linear-gradient(135deg,var(--gold),#A8892A);border-radius:5px"></div>
+        <div style="color:var(--gold-l);font-size:12px;font-weight:700;letter-spacing:.8px">SENIORBANK</div>
+      </div>
+      <div style="color:rgba(255,255,255,.55);font-size:16px;letter-spacing:3px;margin-bottom:20px">4821  ••••  ••••  4821</div>
+      <div style="display:flex;justify-content:space-between;align-items:flex-end">
+        <div><div style="color:#fff;font-size:13px;font-weight:700">PATRICK G. MARTINEZ PULIDO</div><div style="color:rgba(255,255,255,.4);font-size:12px">Válida hasta 05/28</div></div>
+        <div style="display:flex"><div style="width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,.7)"></div><div style="width:28px;height:28px;border-radius:50%;background:rgba(201,168,76,.4);margin-left:-8px"></div></div>
+      </div>
+    </div>
+    <div style="display:flex;justify-content:center;gap:6px;padding:10px"><div style="width:20px;height:5px;border-radius:3px;background:var(--gold)"></div><div style="width:6px;height:5px;border-radius:3px;background:var(--cream-d)"></div></div>
+    <div class="stat-grid">
+      <div class="sc"><div class="sl">Saldo</div><div class="sv">$2.845k</div></div>
+      <div class="sc"><div class="sl">Gasto mayo</div><div class="sv warn">$261.800</div></div>
+      <div class="sc"><div class="sl">Ingresos</div><div class="sv pos">+$1.500k</div></div>
+      <div class="sc"><div class="sl">Estado</div><div style="margin-top:6px"><span class="chip cg">● Activa</span></div></div>
+    </div>
+    <div class="sec"><h3>Seguridad y configuración</h3></div>
+    <div class="row-item" onclick="openM('m-pin')">
+      <div class="ri-ic" style="background:var(--gold-p)">🔒</div>
+      <div class="ri-in"><div class="ri-nm">Cambiar contraseña o PIN</div><div class="ri-sb">Actualice su clave de seguridad</div></div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="var(--tmut)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="row-item">
+      <div class="ri-ic" style="background:var(--teal-p)">🫵</div>
+      <div class="ri-in"><div class="ri-nm">Huella y reconocimiento facial</div><div class="ri-sb">Ingrese sin contraseña</div></div>
+      <button class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+    </div>
+    <div class="row-item" onclick="openM('m-limits')">
+      <div class="ri-ic" style="background:#EEF2F7">📊</div>
+      <div class="ri-in"><div class="ri-nm">Límites de transferencia</div><div class="ri-sb">Máx. diario: $5.000.000</div></div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="var(--tmut)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div class="row-item">
+      <div class="ri-ic" style="background:#F7F0E8">🔔</div>
+      <div class="ri-in"><div class="ri-nm">Alertas de movimientos</div><div class="ri-sb">SMS y notificación en la app</div></div>
+      <button class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+    </div>
+    <div class="row-item" onclick="openM('m-block')">
+      <div class="ri-ic" style="background:var(--red-p)">🚫</div>
+      <div class="ri-in"><div class="ri-nm">Bloquear tarjeta temporalmente</div><div class="ri-sb">Puede reactivarla cuando quiera</div></div>
+      <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M5 3l4 4-4 4" stroke="var(--tmut)" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+  <nav class="nb">
+    <button class="ni" onclick="go('s-home')"><svg viewBox="0 0 22 22" fill="none"><path d="M3 9.5L11 3l8 6.5V19a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="1.5"/></svg>Inicio</button>
+    <button class="ni on"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 9h18" stroke="currentColor" stroke-width="1.5"/></svg>Tarjetas</button>
+    <button class="ni" onclick="go('s-send')"><div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 14px rgba(201,168,76,.4)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Enviar</button>
+    <button class="ni" onclick="go('s-savings')"><svg viewBox="0 0 22 22" fill="none"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.3 1.3 4.3 3.2 5.3L10 16h4l.8-2.7C16.7 12.3 18 10.3 18 8c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9.5 16h5M9 19h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ahorros</button>
+    <button class="ni" onclick="go('s-help')"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="14.5" r=".9" fill="currentColor"/></svg>Ayuda</button>
+  </nav>
+</div>
+
+<!-- ═══ HISTORY ═══ -->
+<div class="scr" id="s-history">
+  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Historial completo</div><div class="scr-sub">Todos sus movimientos</div></div>
+  <div class="sb">
+    <div style="display:flex;background:var(--cream);border-radius:11px;margin:14px 20px;padding:3px" id="hist-tabs">
+      <button onclick="fltTxn(this,'t')" style="flex:1;padding:7px 4px;border-radius:8px;background:var(--w);color:var(--td);font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;box-shadow:0 1px 3px rgba(0,0,0,.07)">Todos</button>
+      <button onclick="fltTxn(this,'g')" style="flex:1;padding:7px 4px;border-radius:8px;background:none;color:var(--tmut);font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit">Gastos</button>
+      <button onclick="fltTxn(this,'i')" style="flex:1;padding:7px 4px;border-radius:8px;background:none;color:var(--tmut);font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit">Ingresos</button>
+    </div>
+    <div id="HIST">
+      <div class="date-sep" data-group="t">Hoy — 16 mayo 2026</div>
+      <div class="row-item" data-type="g" onclick="setTxn('Droguería Cruz Verde','Salud','Hoy, 8:30 a.m.','-$45.000','out','💊','#E8F7EE');go('s-txn')">
+        <div class="ri-ic" style="background:#E8F7EE">💊</div><div class="ri-in"><div class="ri-nm">Droguería Cruz Verde</div><div class="ri-sb">Hoy, 8:30 a.m. · Salud</div></div>
+        <div class="ri-rt"><div class="ri-am amo">−$45.000</div></div>
+      </div>
+      <div class="date-sep" data-group="t">Ayer — 15 mayo</div>
+      <div class="row-item" data-type="i" onclick="setTxn('Pensión Porvenir','Ingreso','Ayer, 12:00 p.m.','+$1.200.000','in','🏦','var(--gold-p)');go('s-txn')">
+        <div class="ri-ic" style="background:var(--gold-p)">🏦</div><div class="ri-in"><div class="ri-nm">Pensión Porvenir</div><div class="ri-sb">Ayer, 12:00 p.m. · Ingreso</div></div>
+        <div class="ri-rt"><div class="ri-am ami">+$1.200.000</div></div>
+      </div>
+      <div class="date-sep" data-group="t">14 mayo</div>
+      <div class="row-item" data-type="g" onclick="setTxn('EPM Servicios','Servicios','14 may','-$89.500','out','💡','#EEF2F7');go('s-txn')">
+        <div class="ri-ic" style="background:#EEF2F7">💡</div><div class="ri-in"><div class="ri-nm">EPM Servicios</div><div class="ri-sb">14 may · Servicios</div></div>
+        <div class="ri-rt"><div class="ri-am amo">−$89.500</div></div>
+      </div>
+      <div class="row-item" data-type="g" onclick="setTxn('Éxito Supertiendas','Alimentación','13 may','-$127.300','out','🛒','#FDF0E8');go('s-txn')">
+        <div class="ri-ic" style="background:#FDF0E8">🛒</div><div class="ri-in"><div class="ri-nm">Éxito Supertiendas</div><div class="ri-sb">13 may · Alimentación</div></div>
+        <div class="ri-rt"><div class="ri-am amo">−$127.300</div></div>
+      </div>
+      <div class="date-sep" data-group="t">12 mayo</div>
+      <div class="row-item" data-type="i" onclick="setTxn('Carlos Andres Soriano Gonzalez','Transferencia recibida','12 may','+$300.000','in','👤','#E8EDF7');go('s-txn')">
+        <div class="ri-ic" style="background:#E8EDF7">👤</div><div class="ri-in"><div class="ri-nm">Carlos Andres Soriano Gonzalez</div><div class="ri-sb">12 may · Transferencia recibida</div></div>
+        <div class="ri-rt"><div class="ri-am ami">+$300.000</div></div>
+      </div>
+      <div class="row-item" data-type="g" onclick="setTxn('Internet Claro','Servicios','10 may','-$65.000','out','📶','var(--teal-p)');go('s-txn')">
+        <div class="ri-ic" style="background:var(--teal-p)">📶</div><div class="ri-in"><div class="ri-nm">Internet Claro</div><div class="ri-sb">10 may · Servicios</div></div>
+        <div class="ri-rt"><div class="ri-am amo">−$65.000</div></div>
+      </div>
+      <div class="date-sep" data-group="t">8 mayo</div>
+      <div class="row-item" data-type="i" onclick="setTxn('Omiara Martinez Pinto','Transferencia recibida','8 may','+$50.000','in','👤','#E8EDF7');go('s-txn')">
+        <div class="ri-ic" style="background:#E8EDF7">👤</div><div class="ri-in"><div class="ri-nm">Omiara Martinez Pinto</div><div class="ri-sb">8 may · Transferencia recibida</div></div>
+        <div class="ri-rt"><div class="ri-am ami">+$50.000</div></div>
+      </div>
+      <div class="row-item" data-type="g" onclick="setTxn('Farmacia La Rebaja','Salud','8 may','-$32.400','out','💊','#E8F7EE');go('s-txn')">
+        <div class="ri-ic" style="background:#E8F7EE">💊</div><div class="ri-in"><div class="ri-nm">Farmacia La Rebaja</div><div class="ri-sb">8 may · Salud</div></div>
+        <div class="ri-rt"><div class="ri-am amo">−$32.400</div></div>
+      </div>
+    </div>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ═══ TXN DETAIL ═══ -->
+<div class="scr" id="s-txn">
+  <div class="hdr"><button class="btn-back" onclick="go('s-history')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Detalle</div><div class="scr-sub">Información del movimiento</div></div>
+  <div class="sb">
+    <div style="text-align:center;padding:24px 20px 18px">
+      <div id="TXD-IC" style="width:72px;height:72px;border-radius:50%;background:#E8F7EE;display:inline-flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:12px">💊</div>
+      <div id="TXD-NM" style="font-size:20px;font-weight:700;color:var(--td)">Droguería Cruz Verde</div>
+      <div id="TXD-CT" style="font-size:13px;color:var(--tmut);margin-bottom:8px">Salud</div>
+      <div id="TXD-AM" style="font-size:36px;font-weight:700;color:var(--td)">−$45.000</div>
+    </div>
+    <div class="cf-rows">
+      <div class="cfr"><span class="ck">Fecha y hora</span><span class="cv" id="TXD-DT">Hoy, 8:30 a.m.</span></div>
+      <div class="cfr"><span class="ck">Categoría</span><span class="cv" id="TXD-C2">Salud</span></div>
+      <div class="cfr"><span class="ck">Referencia</span><span class="cv">#TXN-20260516-7741</span></div>
+      <div class="cfr"><span class="ck">Método</span><span class="cv">Débito · ••• 4821</span></div>
+      <div class="cfr"><span class="ck">Estado</span><span class="cv"><span class="chip cg">✓ Completado</span></span></div>
+    </div>
+    <button class="main-btn" onclick="alert('Comprobante guardado como PDF')">Descargar comprobante</button>
+    <button class="ghost-btn" onclick="openM('m-report')">Reportar un problema</button>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ═══ NOTIFICATIONS ═══ -->
+<div class="scr" id="s-notif">
+  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Notificaciones</div><div class="scr-sub">Sus avisos recientes</div></div>
+  <div class="sb">
+    <div class="noti-item unread">
+      <div class="ndot new"></div>
+      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Pensión acreditada</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Su pensión de $1.200.000 fue depositada correctamente ayer a las 12:00 p.m.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">Ayer, 12:00 p.m.</div></div>
+    </div>
+    <div class="noti-item unread">
+      <div class="ndot new"></div>
+      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Servicio próximo a vencer</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Energía EPM de $89.500 vence el 20 de mayo. Pague antes para evitar cortes.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">14 mayo, 9:00 a.m.</div></div>
+    </div>
+    <div class="noti-item">
+      <div class="ndot read"></div>
+      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Transferencia recibida</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Carlos Andres Soriano Gonzalez le envió $300.000. El saldo ya está disponible.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">12 mayo, 3:22 p.m.</div></div>
+    </div>
+    <div class="noti-item">
+      <div class="ndot read"></div>
+      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Transferencia recibida</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Omiara Martinez Pinto le envió $50.000. El saldo ya está disponible.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">8 mayo, 11:14 a.m.</div></div>
+    </div>
+    <div class="noti-item">
+      <div class="ndot read"></div>
+      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Aviso de seguridad</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">SeniorBank nunca le pedirá su clave por llamada, mensaje ni correo electrónico.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">10 mayo</div></div>
+    </div>
+    <button class="ghost-btn" style="margin-top:12px" onclick="alert('Todas las notificaciones marcadas como leídas')">Marcar todas como leídas</button>
+    <div style="height:20px"></div>
+  </div>
+</div>
+
+<!-- ═══ HELP ═══ -->
+<div class="scr" id="s-help">
+  <div class="hdr"><div class="scr-ttl">Centro de ayuda</div><div class="scr-sub">Estamos aquí para acompañarle</div></div>
+  <div class="sb">
+    <div class="sec" style="padding-top:14px"><h3>Accesibilidad</h3></div>
+    <div style="padding:0 20px;display:flex;flex-direction:column;gap:8px;margin-bottom:4px">
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:var(--cream);border-radius:13px;border:1.5px solid var(--bdr)">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:16px">🔡</span><div><div style="font-size:14px;font-weight:600;color:var(--td)">Texto grande</div><div style="font-size:12px;color:var(--tmut)">Letras más grandes en pantalla</div></div></div>
+        <button class="tgl on" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:var(--cream);border-radius:13px;border:1.5px solid var(--bdr)">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:16px">🌙</span><div><div style="font-size:14px;font-weight:600;color:var(--td)">Alto contraste</div><div style="font-size:12px;color:var(--tmut)">Mejora la visibilidad</div></div></div>
+        <button class="tgl off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:var(--cream);border-radius:13px;border:1.5px solid var(--bdr)">
+        <div style="display:flex;align-items:center;gap:10px"><span style="font-size:16px">🔊</span><div><div style="font-size:14px;font-weight:600;color:var(--td)">Lector de pantalla</div><div style="font-size:12px;color:var(--tmut)">Compatible con TalkBack y VoiceOver</div></div></div>
+        <button class="tgl off" onclick="this.classList.toggle('on');this.classList.toggle('off')"></button>
+      </div>
+    </div>
+    <div class="sec"><h3>Preguntas frecuentes</h3></div>
+    <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Cómo envío dinero de forma segura?</span><span class="chev">▼</span></div><div class="faq-a">Toque "Enviar dinero", elija al contacto, ingrese el valor con el teclado, revise el resumen completo y confirme. Siempre verá un paso de verificación antes de que salga el dinero.</div></div>
+    <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Qué hago si cometí un error?</span><span class="chev">▼</span></div><div class="faq-a">Antes de confirmar siempre puede tocar "Cancelar". Si ya confirmó, llámenos al 01 8000 123 456. Contamos con asesores disponibles las 24 horas.</div></div>
+    <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Es seguro pagar servicios aquí?</span><span class="chev">▼</span></div><div class="faq-a">Sí. Usamos cifrado bancario. Todos los pagos quedan registrados y recibirá un comprobante inmediato. Nunca comparta su clave con nadie.</div></div>
+    <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Cómo activo la huella digital?</span><span class="chev">▼</span></div><div class="faq-a">Vaya a "Mis tarjetas" y active "Huella y reconocimiento facial". La próxima vez que ingrese, solo coloque su dedo en el sensor. Es más seguro que una contraseña.</div></div>
+    <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Dónde veo mis contactos guardados?</span><span class="chev">▼</span></div><div class="faq-a">Toque el avatar circular en la pantalla de inicio para ir a su perfil. Allí verá todos sus contactos guardados y podrá enviarles dinero directamente.</div></div>
+    <div style="margin:16px 20px;background:var(--navy);border-radius:16px;padding:20px;text-align:center">
+      <div style="font-size:14px;color:var(--gold-l);margin-bottom:4px;font-weight:700">¿Necesita hablar con alguien?</div>
+      <div style="font-size:12px;color:var(--tmut);margin-bottom:14px">Asesores disponibles lun–sáb, 7 a.m. – 8 p.m.</div>
+      <button class="main-btn" style="margin:0 0 8px;background:var(--gold)" onclick="alert('Conectando con asesor...')">Llamar ahora — Gratis</button>
+      <button class="ghost-btn" style="margin:0;color:var(--gold-l);border-color:rgba(201,168,76,.3)" onclick="alert('Iniciando chat de texto...')">Chat de texto</button>
+    </div>
+    <div style="padding:0 20px 4px;font-size:11px;font-weight:700;color:var(--tmut);letter-spacing:.5px;text-transform:uppercase;margin-top:4px">Certificaciones WCAG 2.2</div>
+    <div style="display:flex;flex-direction:column;gap:6px;padding:8px 20px 24px">
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Contraste AA/AAA verificado</span></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Compatible con lectores de pantalla</span></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Tipografía escalable — mínimo 14px</span></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Flujo guiado máximo 4 pasos</span></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Diseño inclusivo para adultos mayores</span></div>
+    </div>
+  </div>
+  <nav class="nb">
+    <button class="ni" onclick="go('s-home')"><svg viewBox="0 0 22 22" fill="none"><path d="M3 9.5L11 3l8 6.5V19a1 1 0 01-1 1H4a1 1 0 01-1-1V9.5z" stroke="currentColor" stroke-width="1.5"/></svg>Inicio</button>
+    <button class="ni" onclick="go('s-cards')"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 9h18" stroke="currentColor" stroke-width="1.5"/></svg>Tarjetas</button>
+    <button class="ni" onclick="go('s-send')"><div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 14px rgba(201,168,76,.4)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Enviar</button>
+    <button class="ni" onclick="go('s-savings')"><svg viewBox="0 0 22 22" fill="none"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.3 1.3 4.3 3.2 5.3L10 16h4l.8-2.7C16.7 12.3 18 10.3 18 8c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9.5 16h5M9 19h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ahorros</button>
+    <button class="ni on"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="14.5" r=".9" fill="currentColor"/></svg>Ayuda</button>
+  </nav>
+</div>
+
+<!-- ═══ MODALES ═══ -->
+<div id="m-newct" class="modal-ov" onclick="if(event.target===this)closeM('m-newct')">
+  <div class="modal-sh"><div class="dpill"></div><div class="m-ttl">Nuevo contacto</div><div class="m-sub">Ingrese los datos del destinatario</div>
+    <div class="field"><label class="lbl">Nombre completo</label><input class="inp" type="text" placeholder="Ej: Juan Pérez García"></div>
+    <div class="field"><label class="lbl">Número de celular o cuenta</label><input class="inp" type="tel" placeholder="Ej: 310 000 0000"></div>
+    <div class="field"><label class="lbl">Banco o billetera</label><select class="inp"><option>Bancolombia</option><option>Nequi</option><option>Daviplata</option><option>BBVA</option><option>Banco de Bogotá</option><option>Otro</option></select></div>
+    <button class="main-btn" onclick="closeM('m-newct');alert('Contacto guardado correctamente')">Guardar contacto</button>
+    <button class="ghost-btn" onclick="closeM('m-newct')">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-paydetail" class="modal-ov" onclick="if(event.target===this)closeM('m-paydetail')">
+  <div class="modal-sh"><div class="dpill"></div>
+    <div style="display:flex;align-items:center;gap:12px;margin-bottom:14px">
+      <div id="PD-IC" style="width:48px;height:48px;border-radius:14px;background:#FFF9E6;display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0">💡</div>
+      <div><div class="m-ttl" id="PD-NM" style="margin-bottom:1px">Energía EPM</div><div class="m-sub" style="margin-bottom:0">Revise y confirme el pago</div></div>
+    </div>
+    <div class="cf-rows" style="margin:0 0 13px">
+      <div class="cfr"><span class="ck">Servicio</span><span class="cv" id="PD-SVC">Energía EPM</span></div>
+      <div class="cfr"><span class="ck">Valor</span><span class="cv" id="PD-VAL" style="color:var(--teal);font-size:18px">$89.500</span></div>
+      <div class="cfr"><span class="ck">Vencimiento</span><span class="cv" id="PD-VEN">20 mayo 2026</span></div>
+      <div class="cfr"><span class="ck">Saldo disponible</span><span class="cv">$2.845.000</span></div>
+    </div>
+    <button class="main-btn" id="PD-BTN" onclick="confirmPay()">✓ Pagar ahora</button>
+    <button class="ghost-btn" onclick="closeM('m-paydetail')">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-deposit" class="modal-ov" onclick="if(event.target===this)closeM('m-deposit')">
+  <div class="modal-sh"><div class="dpill"></div><div class="m-ttl">Abonar a mis ahorros</div><div class="m-sub">¿Cuánto desea agregar hoy?</div>
+    <div class="field"><label class="lbl">Meta de ahorro</label><select class="inp"><option>Viaje familiar — $340k / $500k</option><option>Emergencias médicas — $420k / $1.000k</option></select></div>
+    <div class="field"><label class="lbl">Valor a abonar</label><input class="inp" type="number" placeholder="Ej: 50000" min="5000"></div>
+    <button class="main-btn" onclick="closeM('m-deposit');alert('¡Abono realizado exitosamente!')">Confirmar abono</button>
+    <button class="ghost-btn" onclick="closeM('m-deposit')">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-meta" class="modal-ov" onclick="if(event.target===this)closeM('m-meta')">
+  <div class="modal-sh"><div class="dpill"></div><div class="m-ttl">Nueva meta de ahorro</div><div class="m-sub">Defina su objetivo y empiece a ahorrar</div>
+    <div class="field"><label class="lbl">Nombre de la meta</label><input class="inp" type="text" placeholder="Ej: Vacaciones, Salud, Regalo..."></div>
+    <div class="field"><label class="lbl">Monto objetivo</label><input class="inp" type="number" placeholder="Ej: 500000"></div>
+    <div class="field"><label class="lbl">Fecha límite (opcional)</label><input class="inp" type="month"></div>
+    <button class="main-btn" onclick="closeM('m-meta');alert('Meta creada correctamente')">Crear meta</button>
+    <button class="ghost-btn" onclick="closeM('m-meta')">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-pin" class="modal-ov" onclick="if(event.target===this)closeM('m-pin')">
+  <div class="modal-sh"><div class="dpill"></div><div class="m-ttl">Cambiar contraseña</div><div class="m-sub">Ingrese su contraseña actual y la nueva</div>
+    <div class="field"><label class="lbl">Contraseña actual</label><input class="inp" type="password" placeholder="••••••"></div>
+    <div class="field"><label class="lbl">Nueva contraseña</label><input class="inp" type="password" placeholder="••••••"></div>
+    <div class="field"><label class="lbl">Confirmar contraseña</label><input class="inp" type="password" placeholder="••••••"></div>
+    <button class="main-btn" onclick="closeM('m-pin');alert('Contraseña actualizada correctamente')">Guardar cambios</button>
+    <button class="ghost-btn" onclick="closeM('m-pin')">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-limits" class="modal-ov" onclick="if(event.target===this)closeM('m-limits')">
+  <div class="modal-sh"><div class="dpill"></div><div class="m-ttl">Límites de transferencia</div><div class="m-sub">Configure cuánto puede moverse por día</div>
+    <div class="cf-rows" style="margin:0 0 14px">
+      <div class="cfr"><span class="ck">Límite diario actual</span><span class="cv">$5.000.000</span></div>
+      <div class="cfr"><span class="ck">Transferido hoy</span><span class="cv">$45.000</span></div>
+      <div class="cfr"><span class="ck">Disponible hoy</span><span class="cv" style="color:var(--teal)">$4.955.000</span></div>
+    </div>
+    <div class="field"><label class="lbl">Nuevo límite diario</label><select class="inp"><option>$500.000</option><option>$1.000.000</option><option>$2.000.000</option><option selected>$5.000.000</option></select></div>
+    <button class="main-btn" onclick="closeM('m-limits');alert('Límite actualizado correctamente')">Guardar límite</button>
+    <button class="ghost-btn" onclick="closeM('m-limits')">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-block" class="modal-ov" onclick="if(event.target===this)closeM('m-block')">
+  <div class="modal-sh"><div class="dpill"></div><div class="m-ttl">Bloquear tarjeta</div><div class="m-sub">Su tarjeta quedará suspendida temporalmente</div>
+    <div class="warn-box" style="margin:0 0 14px">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6.5" stroke="#C94B4B" stroke-width="1.2"/><path d="M7.5 4.5v4M7.5 11v.5" stroke="#C94B4B" stroke-width="1.4" stroke-linecap="round"/></svg>
+      <p style="font-size:12px;color:#7A2525;line-height:1.5">Al bloquear la tarjeta no podrá realizar compras ni transferencias. Puede reactivarla cuando quiera desde esta misma sección.</p>
+    </div>
+    <button style="display:block;width:100%;background:var(--red);border:none;border-radius:14px;padding:16px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px" onclick="closeM('m-block');alert('Tarjeta bloqueada temporalmente. Puede reactivarla en cualquier momento.')">Bloquear tarjeta ahora</button>
+    <button class="ghost-btn" style="margin:0" onclick="closeM('m-block')">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-report" class="modal-ov" onclick="if(event.target===this)closeM('m-report')">
+  <div class="modal-sh"><div class="dpill"></div><div class="m-ttl">Reportar un problema</div><div class="m-sub">Cuéntenos qué ocurrió con este movimiento</div>
+    <div class="field"><label class="lbl">Tipo de problema</label><select class="inp"><option>No reconozco este cobro</option><option>El valor es incorrecto</option><option>No autoricé esta transacción</option><option>Otro problema</option></select></div>
+    <div class="field"><label class="lbl">Descripción (opcional)</label><textarea class="inp" rows="3" placeholder="Cuéntenos con sus palabras qué pasó..."></textarea></div>
+    <button class="main-btn" onclick="closeM('m-report');alert('Reporte enviado. Un asesor le contactará en menos de 24 horas.')">Enviar reporte</button>
+    <button class="ghost-btn" onclick="closeM('m-report')">Cancelar</button>
+  </div>
+</div>
+
+<div id="m-newpay" class="modal-ov" onclick="if(event.target===this)closeM('m-newpay')">
+  <div class="modal-sh"><div class="dpill"></div><div class="m-ttl">Otro servicio</div><div class="m-sub">Ingrese los datos del servicio a pagar</div>
+    <div class="field"><label class="lbl">Nombre del servicio</label><input class="inp" type="text" placeholder="Ej: Administración, predial..."></div>
+    <div class="field"><label class="lbl">Número de referencia</label><input class="inp" type="text" placeholder="Ej: 123456789"></div>
+    <div class="field"><label class="lbl">Valor a pagar</label><input class="inp" type="number" placeholder="Ej: 80000"></div>
+    <button class="main-btn" onclick="closeM('m-newpay');alert('Pago procesado correctamente')">Pagar este servicio</button>
+    <button class="ghost-btn" onclick="closeM('m-newpay')">Cancelar</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+var amt='',ctName='Omiara Martinez Pinto',ctBg='#E8EDF7',ctColor='#2C4A82',ctInit='OM';
+
+function go(id){
+  document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on')});
+  var el=document.getElementById(id);
+  if(el){el.classList.add('on');var sb=el.querySelector('.sb');if(sb)sb.scrollTop=0;}
+  if(id==='s-confirm')updConf();
+  if(id==='s-success'){
+    var v=parseInt(amt||'0');
+    document.getElementById('SC-AMT').textContent='$'+v.toLocaleString('es-CO');
+    document.getElementById('SC-NM').textContent=ctName;
+    document.getElementById('SC-NM2').textContent=ctName;
+  }
+}
+
+function an(n){if(amt.length<9){amt+=n;updAmt();}}
+function dn(){amt=amt.slice(0,-1);updAmt();}
+function updAmt(){
+  var v=parseInt(amt||'0');
+  document.getElementById('SA').textContent=v.toLocaleString('es-CO');
+  document.getElementById('SP').style.width=Math.min((v/5000000)*100,100)+'%';
+}
+function updConf(){
+  var v=parseInt(amt||'0');
+  document.getElementById('CF-AMT').textContent='$'+v.toLocaleString('es-CO');
+  document.getElementById('CF-REM').textContent='$'+Math.max(2845000-v,0).toLocaleString('es-CO');
+  document.getElementById('CF-NM').textContent=ctName;
+  var av=document.getElementById('CF-AV');
+  av.textContent=ctInit;av.style.background=ctBg;av.style.color=ctColor;
+}
+
+function selCt(el,name,init,bg,col){
+  document.querySelectorAll('.ct').forEach(function(c){c.classList.remove('sel')});
+  el.classList.add('sel');
+  ctName=name;ctInit=init;ctBg=bg;ctColor=col;
+  var lb=document.getElementById('ct-lbl');
+  if(lb)lb.innerHTML='<span style="display:inline-flex;align-items:center;gap:5px;background:var(--teal-p);padding:4px 12px;border-radius:20px;font-size:12px;color:var(--teal);font-weight:700">Enviando a: '+name+'</span>';
+}
+
+function selCt2(name,init,bg,col){
+  ctName=name;ctInit=init;ctBg=bg;ctColor=col;
+  var lb=document.getElementById('ct-lbl');
+  if(lb)lb.innerHTML='<span style="display:inline-flex;align-items:center;gap:5px;background:var(--teal-p);padding:4px 12px;border-radius:20px;font-size:12px;color:var(--teal);font-weight:700">Enviando a: '+name+'</span>';
+}
+
+function switchP(el,p){
+  document.getElementById('chart-tabs').querySelectorAll('button').forEach(function(b){
+    b.style.background='none';b.style.color='var(--tmut)';b.style.boxShadow='none';
+  });
+  el.style.background='var(--w)';el.style.color='var(--td)';el.style.boxShadow='0 1px 3px rgba(0,0,0,.07)';
+  var d={
+    sem:{v:[42,60,32,85,55,88,20],l:['L','M','X','J','V','S','D'],tips:['$84.000','$120.000','$64.000','$170.000','$110.000','$176.000 — Pensión','$40.000']},
+    mes:{v:[58,78,44,88,68,50,84,40,64,54,74,46],l:['S1','S2','S3','S4','S5','S6','S7','S8','S9','S10','S11','S12']},
+    año:{v:[68,54,78,64,88,74,58,84,48,68,86,60],l:['E','F','M','A','M','J','J','A','S','O','N','D']}
+  };
+  var bars=document.getElementById('BARS');
+  if(!bars)return;
+  var vals=d[p].v,labs=d[p].l,tips=d[p].tips;
+  var max=Math.max.apply(null,vals);
+  var html='';
+  vals.forEach(function(v,i){
+    var isMax=v===max,isInc=p==='sem'&&i===5;
+    var cls=isInc?'bar-t':isMax?'bar-g':'bar-p';
+    var tip=tips?tips[i]:'$'+(v*2000).toLocaleString('es-CO');
+    html+='<div class="bc"><div class="bar '+cls+'" style="height:'+v+'px" onclick="showTip(\''+tip+'\')"></div><span class="blbl">'+labs[i]+'</span></div>';
+  });
+  bars.innerHTML=html;
+}
+
+function showTip(txt){
+  var t=document.getElementById('bar-tip');if(t)t.textContent=txt;
+}
+
+function openM(id){var m=document.getElementById(id);if(m)m.classList.add('open');}
+function closeM(id){var m=document.getElementById(id);if(m)m.classList.remove('open');}
+
+function openPayD(svc,val,ven,ic,bg){
+  document.getElementById('PD-NM').textContent=svc;
+  document.getElementById('PD-SVC').textContent=svc;
+  document.getElementById('PD-VAL').textContent=val;
+  document.getElementById('PD-VEN').textContent=ven;
+  var icEl=document.getElementById('PD-IC');
+  icEl.textContent=ic;icEl.style.background=bg;
+  var btn=document.getElementById('PD-BTN');
+  if(val==='Al día'){
+    btn.textContent='✓ Ya está al día';
+    btn.style.background='var(--teal)';
+    btn.onclick=function(){closeM('m-paydetail');};
+  } else {
+    btn.textContent='✓ Pagar ahora';
+    btn.style.background='';
+    btn.onclick=confirmPay;
+  }
+  openM('m-paydetail');
+}
+function confirmPay(){
+  var svc=document.getElementById('PD-SVC').textContent;
+  var val=document.getElementById('PD-VAL').textContent;
+  closeM('m-paydetail');
+  alert('Pago de '+svc+' por '+val+' realizado. Comprobante enviado a su correo.');
+}
+
+function setTxn(name,cat,date,a,type,ic,bg){
+  document.getElementById('TXD-IC').textContent=ic;
+  document.getElementById('TXD-IC').style.background=bg;
+  document.getElementById('TXD-NM').textContent=name;
+  document.getElementById('TXD-CT').textContent=cat;
+  document.getElementById('TXD-C2').textContent=cat;
+  document.getElementById('TXD-DT').textContent=date;
+  var am=document.getElementById('TXD-AM');
+  am.textContent=a;am.style.color=type==='in'?'var(--teal)':'var(--td)';
+}
+
+function fltTxn(el,type){
+  document.getElementById('hist-tabs').querySelectorAll('button').forEach(function(b){
+    b.style.background='none';b.style.color='var(--tmut)';b.style.boxShadow='none';
+  });
+  el.style.background='var(--w)';el.style.color='var(--td)';el.style.boxShadow='0 1px 3px rgba(0,0,0,.07)';
+  var items=document.querySelectorAll('#HIST .row-item');
+  var seps=document.querySelectorAll('#HIST .date-sep');
+  items.forEach(function(r){
+    if(type==='t')r.style.display='flex';
+    else if(type==='g')r.style.display=r.dataset.type==='g'?'flex':'none';
+    else r.style.display=r.dataset.type==='i'?'flex':'none';
+  });
+  // Hide orphan date separators
+  seps.forEach(function(sep){
+    var next=sep.nextElementSibling;
+    var hasVisible=false;
+    while(next&&!next.classList.contains('date-sep')){
+      if(next.classList.contains('row-item')&&next.style.display!=='none')hasVisible=true;
+      next=next.nextElementSibling;
+    }
+    sep.style.display=hasVisible?'block':'none';
+  });
+}
+
+function tFaq(el){
+  var a=el.nextElementSibling,c=el.querySelector('.chev');
+  a.classList.toggle('open');c.classList.toggle('open');
+}
+</script>
