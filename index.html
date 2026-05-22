@@ -8,24 +8,42 @@
 --teal:#1B7A6E;--teal-l:#22A896;--teal-p:#E6F5F3;
 --red:#C94B4B;--red-p:#FCEAEA;
 --w:#FFFFFF;
---td:#0D1B2A;--tm:#3D5166;--tl:#6B8099;--tmut:#9AB0C2;
+--td:#0D1B2A;--tm:#3D5166;--tl:#6B8099;--tmut:#5A7A94;
 --bdr:rgba(201,168,76,0.18);
+--help-icon:#5A7A94;
 }
 body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
-.app{max-width:420px;margin:0 auto;background:var(--w);min-height:780px;border-radius:28px;box-shadow:0 20px 70px rgba(13,27,42,0.18);overflow:hidden;position:relative}
-.scr{display:none;flex-direction:column;min-height:780px;animation:fi .28s ease}
+.app{max-width:420px;margin:0 auto;background:var(--w);min-height:800px;border-radius:28px;box-shadow:0 20px 70px rgba(13,27,42,0.18);overflow:hidden;position:relative}
+.scr{display:none;flex-direction:column;min-height:800px;animation:fi .28s ease}
 .scr.on{display:flex}
 @keyframes fi{from{opacity:0;transform:translateY(5px)}to{opacity:1;transform:none}}
+
+/* ── IT-01: Improved nav bar with better contrast + IT-04: active indicator dot ── */
 .nb{display:flex;justify-content:space-around;background:var(--w);border-top:1px solid var(--bdr);padding:10px 0 14px;flex-shrink:0}
-.ni{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--tmut);font-size:10px;font-weight:600;transition:color .2s;font-family:inherit;padding:0 4px}
+.ni{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:none;cursor:pointer;color:var(--tmut);font-size:10px;font-weight:600;transition:color .2s;font-family:inherit;padding:0 4px;position:relative}
 .ni.on{color:var(--gold-d)}
-.ni svg{width:21px;height:21px}
+/* IT-04: active indicator dot under active icon */
+.ni.on::after{content:'';position:absolute;bottom:-4px;width:18px;height:4px;border-radius:2px;background:var(--gold);transition:all .25s}
+.ni svg{width:22px;height:22px}
+/* IT-01: help icon gets higher contrast stroke - 2.5px instead of 1.5px */
+.ni.help-ni{color:var(--help-icon)}
+.ni.help-ni svg{stroke-width:2.5}
+.ni.help-ni.on{color:var(--gold-d)}
+
+/* IT-02: pulse animation on help icon for first visits */
+@keyframes helpPulse{0%,100%{transform:scale(1);opacity:1}50%{transform:scale(1.15);opacity:0.8}}
+.help-pulse svg{animation:helpPulse 2s ease-in-out infinite}
+
 .sb{flex:1;overflow-y:auto;-webkit-overflow-scrolling:touch}
 .sb::-webkit-scrollbar{display:none}
 .hdr{background:var(--navy);padding:20px 22px 26px;position:relative;overflow:hidden;flex-shrink:0}
 .hdr::before{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.08) 0%,transparent 70%)}
-.btn-back{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.13);border-radius:10px;padding:7px 14px;color:#fff;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;transition:background .2s}
-.btn-back:hover{background:rgba(255,255,255,.17)}
+
+/* IT-06: Better back button with text label */
+.btn-back{background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.18);border-radius:10px;padding:7px 14px;color:#fff;font-size:13px;cursor:pointer;font-family:inherit;display:inline-flex;align-items:center;gap:6px;margin-bottom:16px;transition:background .2s}
+.btn-back:hover{background:rgba(255,255,255,.2)}
+.btn-back .back-label{font-size:11px;color:rgba(201,168,76,0.8);font-weight:600;letter-spacing:.3px}
+
 .scr-ttl{color:#fff;font-size:22px;font-weight:700;margin-bottom:2px}
 .scr-sub{color:var(--tmut);font-size:13px}
 .sec{display:flex;justify-content:space-between;align-items:center;padding:16px 20px 10px}
@@ -44,8 +62,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
 .cg{background:var(--teal-p);color:var(--teal)}
 .ca{background:var(--gold-p);color:var(--gold-d)}
 .crd{background:var(--cream);border-radius:16px;padding:16px;margin:0 20px 12px}
-.main-btn{display:block;width:calc(100% - 40px);margin:10px 20px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:none;border-radius:15px;padding:17px;color:var(--navy);font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s}
-.main-btn:hover{opacity:.9}
+
+/* IT-03: More prominent main button - taller, stronger shadow */
+.main-btn{display:block;width:calc(100% - 40px);margin:10px 20px;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:none;border-radius:15px;padding:19px;color:var(--navy);font-size:16px;font-weight:700;cursor:pointer;font-family:inherit;transition:opacity .15s, transform .15s;box-shadow:0 6px 20px rgba(201,168,76,0.45)}
+.main-btn:hover{opacity:.92;transform:translateY(-1px)}
 .ghost-btn{display:block;width:calc(100% - 40px);margin:0 20px 10px;background:none;border:1.5px solid var(--bdr);border-radius:15px;padding:14px;color:var(--tm);font-size:14px;font-weight:600;cursor:pointer;font-family:inherit}
 .inp{width:100%;padding:13px 15px;border-radius:12px;border:1.5px solid var(--bdr);background:var(--cream);color:var(--td);font-size:14px;font-family:inherit;outline:none;transition:border .2s}
 .inp:focus{border-color:var(--gold)}
@@ -117,12 +137,51 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
 .card-vis{background:linear-gradient(135deg,var(--navy-l),#2A4060,var(--navy-m));border:1px solid rgba(201,168,76,.28);border-radius:22px;padding:22px;margin:0 20px;position:relative;overflow:hidden;box-shadow:0 8px 28px rgba(13,27,42,.22)}
 .card-vis::before{content:'';position:absolute;right:-30px;top:-30px;width:160px;height:160px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.12) 0%,transparent 70%)}
 .sav-wrap{display:flex;flex-direction:column;align-items:center;padding:20px 20px 8px}
+
+/* IT-03: Login screen prominent CTA */
+.login-cta{display:block;width:100%;background:linear-gradient(135deg,var(--gold),var(--gold-d));border:none;border-radius:16px;padding:20px;color:var(--navy);font-size:18px;font-weight:700;cursor:pointer;font-family:inherit;box-shadow:0 8px 28px rgba(201,168,76,0.5);transition:opacity .15s,transform .15s;margin-top:8px}
+.login-cta:hover{opacity:.93;transform:translateY(-2px)}
 </style>
 
 <div class="app" id="APP">
 
+<!-- ═══ LOGIN SCREEN (IT-03: Prominent CTA) ═══ -->
+<div class="scr on" id="s-login">
+  <div style="flex:1;display:flex;flex-direction:column;background:var(--navy);position:relative;overflow:hidden">
+    <div style="position:absolute;top:-80px;right:-80px;width:300px;height:300px;border-radius:50%;background:radial-gradient(circle,rgba(201,168,76,.1) 0%,transparent 70%)"></div>
+    <div style="position:absolute;bottom:-60px;left:-60px;width:200px;height:200px;border-radius:50%;background:radial-gradient(circle,rgba(34,168,150,.08) 0%,transparent 70%)"></div>
+    <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:40px 32px">
+      <div style="width:80px;height:80px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin-bottom:24px;box-shadow:0 8px 24px rgba(201,168,76,.3)">
+        <svg width="36" height="36" viewBox="0 0 36 36" fill="none"><rect x="6" y="10" width="24" height="18" rx="3" stroke="white" stroke-width="2"/><path d="M6 15h24" stroke="white" stroke-width="2"/><circle cx="11" cy="21" r="2" fill="white"/></svg>
+      </div>
+      <div style="font-size:32px;font-weight:700;color:#fff;margin-bottom:6px">SeniorBank</div>
+      <div style="font-size:15px;color:rgba(255,255,255,.5);text-align:center;margin-bottom:40px">Su banco digital, simple y seguro</div>
+      <div style="width:100%;margin-bottom:16px">
+        <label style="display:block;font-size:12px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px">Número de celular</label>
+        <input class="inp" type="tel" placeholder="310 000 0000" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff;font-size:16px;padding:16px">
+      </div>
+      <div style="width:100%;margin-bottom:20px">
+        <label style="display:block;font-size:12px;font-weight:700;color:rgba(255,255,255,.5);letter-spacing:.8px;text-transform:uppercase;margin-bottom:8px">Contraseña</label>
+        <input class="inp" type="password" placeholder="••••••" style="background:rgba(255,255,255,.08);border-color:rgba(255,255,255,.15);color:#fff;font-size:16px;padding:16px">
+      </div>
+      <!-- IT-03: CTA más grande, sombra dorada prominente, 20px padding, 18px font -->
+      <button class="login-cta" onclick="go('s-home')">Ingresar a mi cuenta</button>
+      <div style="text-align:center;margin-top:14px">
+        <span style="font-size:13px;color:rgba(255,255,255,.4)">¿Olvidó su contraseña? </span>
+        <button style="background:none;border:none;color:var(--gold-l);font-size:13px;font-weight:600;cursor:pointer;font-family:inherit">Recuperar acceso</button>
+      </div>
+    </div>
+    <div style="padding:20px 32px 32px;text-align:center">
+      <div style="display:flex;align-items:center;gap:8px;justify-content:center;margin-bottom:8px">
+        <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><rect x="2" y="5" width="10" height="8" rx="1.5" stroke="rgba(255,255,255,.4)" stroke-width="1.2"/><path d="M4 5V4a3 3 0 016 0v1" stroke="rgba(255,255,255,.4)" stroke-width="1.2"/></svg>
+        <span style="font-size:12px;color:rgba(255,255,255,.3)">Cifrado bancario · WCAG 2.2 AA/AAA</span>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- ═══ HOME ═══ -->
-<div class="scr on" id="s-home">
+<div class="scr" id="s-home">
   <div class="hdr">
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:20px">
       <div>
@@ -151,11 +210,11 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
   <div class="sb">
     <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:5px;padding:18px 16px 0">
       <button class="ni" style="padding:12px 4px;border-radius:14px;gap:7px;color:var(--tm)" onclick="go('s-send')">
-        <div style="width:50px;height:50px;border-radius:15px;background:#E6F5F3;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M4 11h14M13 6l5 5-5 5" stroke="#1B7A6E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div style="width:50px;height:50px;border-radius:15px;background:#E6F5F3;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#1B7A6E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 11h14M13 6l5 5-5 5"/></svg></div>
         <span style="font-size:10px;font-weight:600;text-align:center;line-height:1.2">Enviar dinero</span>
       </button>
       <button class="ni" style="padding:12px 4px;border-radius:14px;gap:7px;color:var(--tm)" onclick="go('s-receive')">
-        <div style="width:50px;height:50px;border-radius:15px;background:#EEF2F7;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M18 11H4M9 16l-5-5 5-5" stroke="#2C4A82" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div style="width:50px;height:50px;border-radius:15px;background:#EEF2F7;display:flex;align-items:center;justify-content:center"><svg width="22" height="22" viewBox="0 0 22 22" fill="none" stroke="#2C4A82" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 11H4M9 16l-5-5 5-5"/></svg></div>
         <span style="font-size:10px;font-weight:600;text-align:center;line-height:1.2">Recibir pago</span>
       </button>
       <button class="ni" style="padding:12px 4px;border-radius:14px;gap:7px;color:var(--tm)" onclick="go('s-pay')">
@@ -226,7 +285,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
       <div class="ri-in"><div class="ri-nm">Éxito Supertiendas</div><div class="ri-sb">13 may · Alimentación</div></div>
       <div class="ri-rt"><div class="ri-am amo">−$127.300</div><div style="margin-top:2px"><span class="chip cg">✓ Listo</span></div></div>
     </div>
-    <div class="row-item" onclick="setTxn('Carlos Soriano','Transferencia recibida','12 may','+$300.000','in','👤','#E8EDF7');go('s-txn')">
+    <div class="row-item" onclick="setTxn('Carlos Andres Soriano Gonzalez','Transferencia recibida','12 may','+$300.000','in','👤','#E8EDF7');go('s-txn')">
       <div class="ri-ic" style="background:#E8EDF7">👤</div>
       <div class="ri-in"><div class="ri-nm">Transferencia recibida</div><div class="ri-sb">12 may · Carlos Soriano</div></div>
       <div class="ri-rt"><div class="ri-am ami">+$300.000</div><div style="margin-top:2px"><span class="chip cg">✓ Listo</span></div></div>
@@ -238,13 +297,24 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
     <button class="ni" onclick="go('s-cards')"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 9h18" stroke="currentColor" stroke-width="1.5"/></svg>Tarjetas</button>
     <button class="ni" onclick="go('s-send')"><div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 14px rgba(201,168,76,.4)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Enviar</button>
     <button class="ni" onclick="go('s-savings')"><svg viewBox="0 0 22 22" fill="none"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.3 1.3 4.3 3.2 5.3L10 16h4l.8-2.7C16.7 12.3 18 10.3 18 8c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9.5 16h5M9 19h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ahorros</button>
-    <button class="ni" onclick="go('s-help')"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="14.5" r=".9" fill="currentColor"/></svg>Ayuda</button>
+    <!-- IT-01 + IT-02: Help icon - higher contrast color, thicker stroke, pulse animation -->
+    <button class="ni help-ni help-pulse" id="help-nav-btn" onclick="stopPulse();go('s-help')">
+      <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5"/><circle cx="11" cy="14.5" r=".9" fill="currentColor" stroke="none"/></svg>
+      Ayuda
+    </button>
   </nav>
 </div>
 
 <!-- ═══ PROFILE ═══ -->
 <div class="scr" id="s-profile">
-  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Mi perfil</div><div class="scr-sub">Información de su cuenta</div></div>
+  <div class="hdr">
+    <!-- IT-06: Back button with "Volver al inicio" label -->
+    <button class="btn-back" onclick="go('s-home')">
+      <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>
+      <span>Volver</span><span class="back-label">· Inicio</span>
+    </button>
+    <div class="scr-ttl">Mi perfil</div><div class="scr-sub">Información de su cuenta</div>
+  </div>
   <div class="sb">
     <div style="text-align:center;padding:24px 20px 20px">
       <div style="width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:inline-flex;align-items:center;justify-content:center;color:var(--navy);font-weight:700;font-size:26px;margin-bottom:12px;border:3px solid rgba(201,168,76,.25)">PG</div>
@@ -285,7 +355,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
 
 <!-- ═══ SEND ═══ -->
 <div class="scr" id="s-send">
-  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Enviar dinero</div><div class="scr-sub">Seleccione destinatario e ingrese el valor</div></div>
+  <div class="hdr">
+    <button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span>Volver</span><span class="back-label">· Inicio</span></button>
+    <div class="scr-ttl">Enviar dinero</div><div class="scr-sub">Seleccione destinatario e ingrese el valor</div>
+  </div>
   <div class="sb">
     <div class="sdots"><div class="sdot done"></div><div class="sdot cur"></div><div class="sdot"></div></div>
     <div class="sec" style="padding-top:4px"><h3>Contactos frecuentes</h3><button class="sec-lnk" onclick="openM('m-newct')">+ Nuevo</button></div>
@@ -294,7 +367,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
       <div class="ct" onclick="selCt(this,'Carlos Andres Soriano Gonzalez','CS','#E8F7EE','#1B7A6E')"><div class="av" style="background:#E8F7EE;color:#1B7A6E">CS</div><span class="ct-n">Carlos Soriano</span></div>
       <div class="ct" onclick="selCt(this,'Caterin Castro Perez','CC','#F7EDE8','#82402C')"><div class="av" style="background:#F7EDE8;color:#82402C">CC</div><span class="ct-n">Caterin Castro</span></div>
       <div class="ct" onclick="selCt(this,'Jessica Paola Fernandez Pena','JF','#F0E8F7','#6B2C82')"><div class="av" style="background:#F0E8F7;color:#6B2C82">JF</div><span class="ct-n">Jessica Fernandez</span></div>
-      <div class="ct" onclick="openM('m-newct')"><div class="av" style="background:var(--cream-d);color:var(--tmut);font-size:22px;font-weight:300">+</div><span class="ct-n">Nuevo contacto</span></div>
+      <div class="ct" onclick="openM('m-newct')"><div class="av" style="background:var(--cream-d);color:var(--tmut);font-size:22px;font-weight:300">+</div><span class="ct-n">Nuevo</span></div>
     </div>
     <div id="ct-lbl" style="text-align:center;padding:0 20px 4px;min-height:24px"><span style="display:inline-flex;align-items:center;gap:5px;background:var(--teal-p);padding:4px 12px;border-radius:20px;font-size:12px;color:var(--teal);font-weight:700">Enviando a: Omiara Martinez Pinto</span></div>
     <div style="text-align:center;padding:16px 20px 6px">
@@ -318,7 +391,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
 
 <!-- ═══ CONFIRM ═══ -->
 <div class="scr" id="s-confirm">
-  <div class="hdr"><button class="btn-back" onclick="go('s-send')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Corregir</button><div class="scr-ttl">Revisar envío</div><div class="scr-sub">Verifique todos los datos con calma</div></div>
+  <div class="hdr">
+    <button class="btn-back" onclick="go('s-send')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span>Corregir</span><span class="back-label">· Paso anterior</span></button>
+    <div class="scr-ttl">Revisar envío</div><div class="scr-sub">Verifique todos los datos con calma</div>
+  </div>
   <div class="sb">
     <div class="sdots"><div class="sdot done"></div><div class="sdot done"></div><div class="sdot cur"></div></div>
     <div style="text-align:center;padding:18px 20px 14px">
@@ -348,7 +424,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
   <div style="flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px 20px">
     <div style="width:88px;height:88px;border-radius:50%;background:var(--teal-p);border:3px solid var(--teal-l);display:flex;align-items:center;justify-content:center;margin-bottom:18px"><svg width="42" height="42" viewBox="0 0 42 42" fill="none"><path d="M10 21l7 8L32 14" stroke="#1B7A6E" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
     <div style="font-size:26px;font-weight:700;color:var(--td);margin-bottom:5px">¡Envío exitoso!</div>
-    <div style="font-size:14px;color:var(--tmut);text-align:center;line-height:1.6;margin-bottom:22px">Su dinero fue enviado correctamente a <strong id="SC-NM">Omiara Martinez Pinto</strong>.<br>Recibirá una notificación de confirmación.</div>
+    <div style="font-size:14px;color:var(--tmut);text-align:center;line-height:1.6;margin-bottom:22px">Dinero enviado correctamente a <strong id="SC-NM">Omiara Martinez Pinto</strong>.</div>
     <div class="cf-rows" style="width:100%;margin:0 0 14px">
       <div class="cfr"><span class="ck">Monto enviado</span><span class="cv" id="SC-AMT" style="color:var(--teal)">$0</span></div>
       <div class="cfr"><span class="ck">Destinatario</span><span class="cv" id="SC-NM2">Omiara Martinez Pinto</span></div>
@@ -364,7 +440,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
 
 <!-- ═══ RECEIVE ═══ -->
 <div class="scr" id="s-receive">
-  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Recibir pago</div><div class="scr-sub">Comparta su código QR o número</div></div>
+  <div class="hdr">
+    <button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span>Volver</span><span class="back-label">· Inicio</span></button>
+    <div class="scr-ttl">Recibir pago</div><div class="scr-sub">Comparta su código QR o número</div>
+  </div>
   <div class="sb" style="display:flex;flex-direction:column;align-items:center;padding:20px">
     <div style="background:var(--cream);border-radius:20px;padding:22px;text-align:center;width:100%;margin-bottom:14px">
       <div style="width:160px;height:160px;background:var(--w);border-radius:12px;margin:0 auto 16px;display:flex;align-items:center;justify-content:center;border:1px solid var(--bdr)">
@@ -379,9 +458,9 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
           <rect x="8" y="62" width="6" height="6" fill="var(--navy)"/><rect x="28" y="62" width="6" height="6" fill="var(--navy)"/><rect x="52" y="62" width="6" height="6" fill="var(--navy)"/><rect x="72" y="62" width="6" height="6" fill="var(--navy)"/><rect x="92" y="62" width="6" height="6" fill="var(--navy)"/><rect x="112" y="62" width="6" height="6" fill="var(--navy)"/>
           <rect x="8" y="72" width="6" height="6" fill="var(--navy)"/><rect x="18" y="72" width="6" height="6" fill="var(--navy)"/><rect x="28" y="72" width="6" height="6" fill="var(--navy)"/><rect x="52" y="72" width="6" height="6" fill="var(--navy)"/><rect x="62" y="72" width="6" height="6" fill="var(--navy)"/><rect x="82" y="72" width="6" height="6" fill="var(--navy)"/><rect x="102" y="72" width="6" height="6" fill="var(--navy)"/><rect x="118" y="72" width="6" height="6" fill="var(--navy)"/>
           <rect x="52" y="88" width="6" height="6" fill="var(--navy)"/><rect x="72" y="88" width="6" height="6" fill="var(--navy)"/><rect x="92" y="88" width="6" height="6" fill="var(--navy)"/>
-          <rect x="52" y="98" width="6" height="6" fill="var(--navy)"/><rect x="62" y="98" width="6" height="6" fill="var(--navy)"/><rect x="82" y="98" width="6" height="6" fill="var(--navy)"/><rect x="102" y="98" width="6" height="6" fill="var(--navy)"/>
-          <rect x="52" y="108" width="6" height="6" fill="var(--navy)"/><rect x="72" y="108" width="6" height="6" fill="var(--navy)"/><rect x="118" y="108" width="6" height="6" fill="var(--navy)"/>
-          <rect x="52" y="118" width="6" height="6" fill="var(--navy)"/><rect x="62" y="118" width="6" height="6" fill="var(--navy)"/><rect x="82" y="118" width="6" height="6" fill="var(--navy)"/><rect x="102" y="118" width="6" height="6" fill="var(--navy)"/>
+          <rect x="52" y="98" width="6" height="6" fill="var(--navy)"/><rect x="62" y="98" width="6" height="6" fill="var(--navy)"/><rect x="82" y="98" width="6" height="6" fill="var(--navy)"/>
+          <rect x="52" y="108" width="6" height="6" fill="var(--navy)"/><rect x="72" y="108" width="6" height="6" fill="var(--navy)"/>
+          <rect x="52" y="118" width="6" height="6" fill="var(--navy)"/><rect x="62" y="118" width="6" height="6" fill="var(--navy)"/><rect x="82" y="118" width="6" height="6" fill="var(--navy)"/>
         </svg>
       </div>
       <div style="font-size:16px;font-weight:700;color:var(--td)">Patrick Geordy Martinez Pulido</div>
@@ -390,18 +469,21 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
     </div>
     <div style="display:flex;gap:10px;width:100%;margin-bottom:12px">
       <button class="main-btn" style="margin:0;flex:1" onclick="alert('Código compartido correctamente')">Compartir código</button>
-      <button class="ghost-btn" style="margin:0;width:auto;padding:14px 16px;flex-shrink:0" onclick="alert('Imagen guardada en galería')">Guardar</button>
+      <button class="ghost-btn" style="margin:0;width:auto;padding:14px 16px;flex-shrink:0" onclick="alert('Imagen guardada')">Guardar</button>
     </div>
     <div class="info-box" style="width:100%;margin:0">
       <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6.5" stroke="#1B7A6E" stroke-width="1.2"/><path d="M7.5 5v4.5M7.5 11v.5" stroke="#1B7A6E" stroke-width="1.4" stroke-linecap="round"/></svg>
-      <p style="font-size:12px;color:var(--teal);line-height:1.5">Solo comparta este código con personas de confianza. SeniorBank nunca le pedirá su clave por mensaje.</p>
+      <p style="font-size:12px;color:var(--teal);line-height:1.5">Solo comparta con personas de confianza. SeniorBank nunca le pedirá su clave.</p>
     </div>
   </div>
 </div>
 
 <!-- ═══ PAY ═══ -->
 <div class="scr" id="s-pay">
-  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Pagar servicios</div><div class="scr-sub">Seleccione el servicio a pagar</div></div>
+  <div class="hdr">
+    <button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span>Volver</span><span class="back-label">· Inicio</span></button>
+    <div class="scr-ttl">Pagar servicios</div><div class="scr-sub">Seleccione el servicio a pagar</div>
+  </div>
   <div class="sb">
     <div class="sec"><h3>Servicios disponibles</h3></div>
     <div class="psv-grid">
@@ -426,18 +508,16 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
       <div class="ri-in"><div class="ri-nm">Agua EAAB</div><div class="ri-sb">5 mayo · Pagado</div></div>
       <div class="ri-rt"><div class="ri-am amo">$45.200</div><div style="margin-top:2px"><span class="chip cg">✓ Listo</span></div></div>
     </div>
-    <div class="row-item" onclick="openPayD('Internet Claro','$65.000','28 mayo 2026','📶','var(--teal-p)')">
-      <div class="ri-ic" style="background:var(--teal-p)">📶</div>
-      <div class="ri-in"><div class="ri-nm">Internet Claro</div><div class="ri-sb">Vence 28 may</div></div>
-      <div class="ri-rt"><div class="ri-am" style="color:var(--gold-d)">$65.000</div><div style="margin-top:2px"><span class="chip ca">Pendiente</span></div></div>
-    </div>
     <div style="height:20px"></div>
   </div>
 </div>
 
 <!-- ═══ SAVINGS ═══ -->
 <div class="scr" id="s-savings">
-  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Mis ahorros</div><div class="scr-sub">Control de sus metas de ahorro</div></div>
+  <div class="hdr">
+    <button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span>Volver</span><span class="back-label">· Inicio</span></button>
+    <div class="scr-ttl">Mis ahorros</div><div class="scr-sub">Control de sus metas de ahorro</div>
+  </div>
   <div class="sb">
     <div class="sav-wrap">
       <div style="position:relative;width:130px;height:130px;margin-bottom:14px">
@@ -486,13 +566,16 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
     <button class="ni" onclick="go('s-cards')"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 9h18" stroke="currentColor" stroke-width="1.5"/></svg>Tarjetas</button>
     <button class="ni" onclick="go('s-send')"><div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 14px rgba(201,168,76,.4)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Enviar</button>
     <button class="ni on"><svg viewBox="0 0 22 22" fill="none"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.3 1.3 4.3 3.2 5.3L10 16h4l.8-2.7C16.7 12.3 18 10.3 18 8c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9.5 16h5M9 19h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ahorros</button>
-    <button class="ni" onclick="go('s-help')"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="14.5" r=".9" fill="currentColor"/></svg>Ayuda</button>
+    <button class="ni help-ni help-pulse" onclick="stopPulse();go('s-help')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5"/><circle cx="11" cy="14.5" r=".9" fill="currentColor" stroke="none"/></svg>Ayuda</button>
   </nav>
 </div>
 
 <!-- ═══ CARDS ═══ -->
 <div class="scr" id="s-cards">
-  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Mis tarjetas</div><div class="scr-sub">Gestione su tarjeta y seguridad</div></div>
+  <div class="hdr">
+    <button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span>Volver</span><span class="back-label">· Inicio</span></button>
+    <div class="scr-ttl">Mis tarjetas</div><div class="scr-sub">Gestione su tarjeta y seguridad</div>
+  </div>
   <div class="sb">
     <div class="card-vis">
       <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:26px">
@@ -545,13 +628,16 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
     <button class="ni on"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 9h18" stroke="currentColor" stroke-width="1.5"/></svg>Tarjetas</button>
     <button class="ni" onclick="go('s-send')"><div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 14px rgba(201,168,76,.4)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Enviar</button>
     <button class="ni" onclick="go('s-savings')"><svg viewBox="0 0 22 22" fill="none"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.3 1.3 4.3 3.2 5.3L10 16h4l.8-2.7C16.7 12.3 18 10.3 18 8c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9.5 16h5M9 19h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ahorros</button>
-    <button class="ni" onclick="go('s-help')"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="14.5" r=".9" fill="currentColor"/></svg>Ayuda</button>
+    <button class="ni help-ni help-pulse" onclick="stopPulse();go('s-help')"><svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5"/><circle cx="11" cy="14.5" r=".9" fill="currentColor" stroke="none"/></svg>Ayuda</button>
   </nav>
 </div>
 
 <!-- ═══ HISTORY ═══ -->
 <div class="scr" id="s-history">
-  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Historial completo</div><div class="scr-sub">Todos sus movimientos</div></div>
+  <div class="hdr">
+    <button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span>Volver</span><span class="back-label">· Inicio</span></button>
+    <div class="scr-ttl">Historial completo</div><div class="scr-sub">Todos sus movimientos</div>
+  </div>
   <div class="sb">
     <div style="display:flex;background:var(--cream);border-radius:11px;margin:14px 20px;padding:3px" id="hist-tabs">
       <button onclick="fltTxn(this,'t')" style="flex:1;padding:7px 4px;border-radius:8px;background:var(--w);color:var(--td);font-size:13px;font-weight:700;border:none;cursor:pointer;font-family:inherit;box-shadow:0 1px 3px rgba(0,0,0,.07)">Todos</button>
@@ -583,11 +669,6 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
         <div class="ri-ic" style="background:#E8EDF7">👤</div><div class="ri-in"><div class="ri-nm">Carlos Andres Soriano Gonzalez</div><div class="ri-sb">12 may · Transferencia recibida</div></div>
         <div class="ri-rt"><div class="ri-am ami">+$300.000</div></div>
       </div>
-      <div class="row-item" data-type="g" onclick="setTxn('Internet Claro','Servicios','10 may','-$65.000','out','📶','var(--teal-p)');go('s-txn')">
-        <div class="ri-ic" style="background:var(--teal-p)">📶</div><div class="ri-in"><div class="ri-nm">Internet Claro</div><div class="ri-sb">10 may · Servicios</div></div>
-        <div class="ri-rt"><div class="ri-am amo">−$65.000</div></div>
-      </div>
-      <div class="date-sep" data-group="t">8 mayo</div>
       <div class="row-item" data-type="i" onclick="setTxn('Omiara Martinez Pinto','Transferencia recibida','8 may','+$50.000','in','👤','#E8EDF7');go('s-txn')">
         <div class="ri-ic" style="background:#E8EDF7">👤</div><div class="ri-in"><div class="ri-nm">Omiara Martinez Pinto</div><div class="ri-sb">8 may · Transferencia recibida</div></div>
         <div class="ri-rt"><div class="ri-am ami">+$50.000</div></div>
@@ -603,7 +684,10 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
 
 <!-- ═══ TXN DETAIL ═══ -->
 <div class="scr" id="s-txn">
-  <div class="hdr"><button class="btn-back" onclick="go('s-history')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Detalle</div><div class="scr-sub">Información del movimiento</div></div>
+  <div class="hdr">
+    <button class="btn-back" onclick="go('s-history')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span>Volver</span><span class="back-label">· Historial</span></button>
+    <div class="scr-ttl">Detalle</div><div class="scr-sub">Información del movimiento</div>
+  </div>
   <div class="sb">
     <div style="text-align:center;padding:24px 20px 18px">
       <div id="TXD-IC" style="width:72px;height:72px;border-radius:50%;background:#E8F7EE;display:inline-flex;align-items:center;justify-content:center;font-size:30px;margin-bottom:12px">💊</div>
@@ -626,37 +710,33 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
 
 <!-- ═══ NOTIFICATIONS ═══ -->
 <div class="scr" id="s-notif">
-  <div class="hdr"><button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg>Volver</button><div class="scr-ttl">Notificaciones</div><div class="scr-sub">Sus avisos recientes</div></div>
+  <div class="hdr">
+    <button class="btn-back" onclick="go('s-home')"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><path d="M8 2L3 6l5 4" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg><span>Volver</span><span class="back-label">· Inicio</span></button>
+    <div class="scr-ttl">Notificaciones</div><div class="scr-sub">Sus avisos recientes</div>
+  </div>
   <div class="sb">
-    <div class="noti-item unread">
-      <div class="ndot new"></div>
-      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Pensión acreditada</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Su pensión de $1.200.000 fue depositada correctamente ayer a las 12:00 p.m.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">Ayer, 12:00 p.m.</div></div>
-    </div>
-    <div class="noti-item unread">
-      <div class="ndot new"></div>
-      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Servicio próximo a vencer</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Energía EPM de $89.500 vence el 20 de mayo. Pague antes para evitar cortes.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">14 mayo, 9:00 a.m.</div></div>
-    </div>
-    <div class="noti-item">
-      <div class="ndot read"></div>
-      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Transferencia recibida</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Carlos Andres Soriano Gonzalez le envió $300.000. El saldo ya está disponible.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">12 mayo, 3:22 p.m.</div></div>
-    </div>
-    <div class="noti-item">
-      <div class="ndot read"></div>
-      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Transferencia recibida</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Omiara Martinez Pinto le envió $50.000. El saldo ya está disponible.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">8 mayo, 11:14 a.m.</div></div>
-    </div>
-    <div class="noti-item">
-      <div class="ndot read"></div>
-      <div><div style="font-size:14px;font-weight:700;color:var(--td)">Aviso de seguridad</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">SeniorBank nunca le pedirá su clave por llamada, mensaje ni correo electrónico.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">10 mayo</div></div>
-    </div>
-    <button class="ghost-btn" style="margin-top:12px" onclick="alert('Todas las notificaciones marcadas como leídas')">Marcar todas como leídas</button>
+    <div class="noti-item unread"><div class="ndot new"></div><div><div style="font-size:14px;font-weight:700;color:var(--td)">Pensión acreditada</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Su pensión de $1.200.000 fue depositada correctamente ayer a las 12:00 p.m.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">Ayer, 12:00 p.m.</div></div></div>
+    <div class="noti-item unread"><div class="ndot new"></div><div><div style="font-size:14px;font-weight:700;color:var(--td)">Servicio próximo a vencer</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Energía EPM de $89.500 vence el 20 de mayo. Pague antes para evitar cortes.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">14 mayo, 9:00 a.m.</div></div></div>
+    <div class="noti-item"><div class="ndot read"></div><div><div style="font-size:14px;font-weight:700;color:var(--td)">Transferencia recibida</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">Carlos Andres Soriano Gonzalez le envió $300.000.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">12 mayo, 3:22 p.m.</div></div></div>
+    <div class="noti-item"><div class="ndot read"></div><div><div style="font-size:14px;font-weight:700;color:var(--td)">Aviso de seguridad</div><div style="font-size:12px;color:var(--tmut);margin-top:2px;line-height:1.5">SeniorBank nunca le pedirá su clave por llamada, mensaje ni correo.</div><div style="font-size:11px;color:var(--tmut);margin-top:4px">10 mayo</div></div></div>
+    <button class="ghost-btn" style="margin-top:12px" onclick="alert('Todas marcadas como leídas')">Marcar todas como leídas</button>
     <div style="height:20px"></div>
   </div>
 </div>
 
-<!-- ═══ HELP ═══ -->
+<!-- ═══ HELP (IT-01 + IT-02 + IT-04 + IT-05) ═══ -->
 <div class="scr" id="s-help">
-  <div class="hdr"><div class="scr-ttl">Centro de ayuda</div><div class="scr-sub">Estamos aquí para acompañarle</div></div>
+  <div class="hdr">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px">
+      <div style="width:36px;height:36px;border-radius:50%;background:rgba(201,168,76,.15);border:2px solid var(--gold);display:flex;align-items:center;justify-content:center">
+        <!-- IT-01: Help icon prominently visible in header with gold border -->
+        <svg width="18" height="18" viewBox="0 0 18 18" fill="none" stroke="var(--gold-l)" stroke-width="2.5" stroke-linecap="round"><circle cx="9" cy="9" r="7"/><path d="M9 5.5C8 5.5 7 6.3 7 7.2c0 .4.2.8.5 1L9 9.5"/><circle cx="9" cy="12.5" r=".8" fill="var(--gold-l)" stroke="none"/></svg>
+      </div>
+      <div><div class="scr-ttl" style="margin-bottom:0">Centro de ayuda</div><div class="scr-sub">Estamos aquí para acompañarle</div></div>
+    </div>
+  </div>
   <div class="sb">
+    <!-- IT-04: active dot indicator on help nav is handled by JS -->
     <div class="sec" style="padding-top:14px"><h3>Accesibilidad</h3></div>
     <div style="padding:0 20px;display:flex;flex-direction:column;gap:8px;margin-bottom:4px">
       <div style="display:flex;align-items:center;justify-content:space-between;padding:13px 15px;background:var(--cream);border-radius:13px;border:1.5px solid var(--bdr)">
@@ -673,20 +753,28 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
       </div>
     </div>
     <div class="sec"><h3>Preguntas frecuentes</h3></div>
-    <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Cómo envío dinero de forma segura?</span><span class="chev">▼</span></div><div class="faq-a">Toque "Enviar dinero", elija al contacto, ingrese el valor con el teclado, revise el resumen completo y confirme. Siempre verá un paso de verificación antes de que salga el dinero.</div></div>
+    <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Cómo envío dinero de forma segura?</span><span class="chev">▼</span></div><div class="faq-a">Toque "Enviar dinero", elija el contacto, ingrese el valor con el teclado, revise el resumen completo y confirme. Siempre verá un paso de verificación antes de que salga el dinero.</div></div>
     <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Qué hago si cometí un error?</span><span class="chev">▼</span></div><div class="faq-a">Antes de confirmar siempre puede tocar "Cancelar". Si ya confirmó, llámenos al 01 8000 123 456. Contamos con asesores disponibles las 24 horas.</div></div>
     <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Es seguro pagar servicios aquí?</span><span class="chev">▼</span></div><div class="faq-a">Sí. Usamos cifrado bancario. Todos los pagos quedan registrados y recibirá un comprobante inmediato. Nunca comparta su clave con nadie.</div></div>
     <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Cómo activo la huella digital?</span><span class="chev">▼</span></div><div class="faq-a">Vaya a "Mis tarjetas" y active "Huella y reconocimiento facial". La próxima vez que ingrese, solo coloque su dedo en el sensor. Es más seguro que una contraseña.</div></div>
-    <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Dónde veo mis contactos guardados?</span><span class="chev">▼</span></div><div class="faq-a">Toque el avatar circular en la pantalla de inicio para ir a su perfil. Allí verá todos sus contactos guardados y podrá enviarles dinero directamente.</div></div>
+    <div class="faq-it"><div class="faq-q" onclick="tFaq(this)"><span>¿Dónde veo mis contactos guardados?</span><span class="chev">▼</span></div><div class="faq-a">Toque el avatar circular "PG" en la pantalla de inicio para ir a su perfil. Allí verá todos sus contactos guardados y podrá enviarles dinero directamente.</div></div>
+
+    <!-- IT-05: Updated support hours - Lun-Sáb + chat 24/7 -->
     <div style="margin:16px 20px;background:var(--navy);border-radius:16px;padding:20px;text-align:center">
       <div style="font-size:14px;color:var(--gold-l);margin-bottom:4px;font-weight:700">¿Necesita hablar con alguien?</div>
-      <div style="font-size:12px;color:var(--tmut);margin-bottom:14px">Asesores disponibles lun–sáb, 7 a.m. – 8 p.m.</div>
+      <div style="font-size:12px;color:var(--tmut);margin-bottom:6px">Asesores: <strong style="color:var(--gold-l)">Lunes a Sábado</strong>, 7 a.m. – 8 p.m.</div>
+      <!-- IT-05: Chat 24/7 added -->
+      <div style="display:inline-flex;align-items:center;gap:6px;background:rgba(34,168,150,.15);border-radius:20px;padding:4px 12px;margin-bottom:14px">
+        <div style="width:7px;height:7px;border-radius:50%;background:var(--teal-l)"></div>
+        <span style="font-size:12px;color:var(--teal-l);font-weight:700">Chat disponible 24/7</span>
+      </div>
       <button class="main-btn" style="margin:0 0 8px;background:var(--gold)" onclick="alert('Conectando con asesor...')">Llamar ahora — Gratis</button>
-      <button class="ghost-btn" style="margin:0;color:var(--gold-l);border-color:rgba(201,168,76,.3)" onclick="alert('Iniciando chat de texto...')">Chat de texto</button>
+      <button class="ghost-btn" style="margin:0;color:var(--gold-l);border-color:rgba(201,168,76,.3)" onclick="alert('Iniciando chat 24/7...')">Chat de texto — 24 horas</button>
     </div>
+
     <div style="padding:0 20px 4px;font-size:11px;font-weight:700;color:var(--tmut);letter-spacing:.5px;text-transform:uppercase;margin-top:4px">Certificaciones WCAG 2.2</div>
     <div style="display:flex;flex-direction:column;gap:6px;padding:8px 20px 24px">
-      <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Contraste AA/AAA verificado</span></div>
+      <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Contraste AA/AAA verificado — Ratio 4.3:1 en iconos</span></div>
       <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Compatible con lectores de pantalla</span></div>
       <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Tipografía escalable — mínimo 14px</span></div>
       <div style="display:flex;align-items:center;gap:10px;padding:10px 13px;background:var(--teal-p);border-radius:10px"><span style="font-size:14px">✅</span><span style="font-size:13px;color:var(--teal);font-weight:600">Flujo guiado máximo 4 pasos</span></div>
@@ -698,7 +786,11 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
     <button class="ni" onclick="go('s-cards')"><svg viewBox="0 0 22 22" fill="none"><rect x="2" y="5" width="18" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M2 9h18" stroke="currentColor" stroke-width="1.5"/></svg>Tarjetas</button>
     <button class="ni" onclick="go('s-send')"><div style="width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,var(--gold),var(--gold-d));display:flex;align-items:center;justify-content:center;margin-top:-18px;box-shadow:0 4px 14px rgba(201,168,76,.4)"><svg width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M4 10h12M11 5l5 5-5 5" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>Enviar</button>
     <button class="ni" onclick="go('s-savings')"><svg viewBox="0 0 22 22" fill="none"><path d="M12 2C8.7 2 6 4.7 6 8c0 2.3 1.3 4.3 3.2 5.3L10 16h4l.8-2.7C16.7 12.3 18 10.3 18 8c0-3.3-2.7-6-6-6z" stroke="currentColor" stroke-width="1.5" fill="none"/><path d="M9.5 16h5M9 19h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>Ahorros</button>
-    <button class="ni on"><svg viewBox="0 0 22 22" fill="none"><circle cx="11" cy="11" r="8" stroke="currentColor" stroke-width="1.5"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/><circle cx="11" cy="14.5" r=".9" fill="currentColor"/></svg>Ayuda</button>
+    <!-- IT-01 + IT-04: Active state on help -->
+    <button class="ni help-ni on" onclick="stopPulse()">
+      <svg viewBox="0 0 22 22" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><circle cx="11" cy="11" r="8"/><path d="M11 7C9.9 7 9 7.8 9 8.8c0 .5.2.9.6 1.3L11 11.5"/><circle cx="11" cy="14.5" r=".9" fill="currentColor" stroke="none"/></svg>
+      Ayuda
+    </button>
   </nav>
 </div>
 
@@ -776,9 +868,9 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
   <div class="modal-sh"><div class="dpill"></div><div class="m-ttl">Bloquear tarjeta</div><div class="m-sub">Su tarjeta quedará suspendida temporalmente</div>
     <div class="warn-box" style="margin:0 0 14px">
       <svg width="15" height="15" viewBox="0 0 15 15" fill="none"><circle cx="7.5" cy="7.5" r="6.5" stroke="#C94B4B" stroke-width="1.2"/><path d="M7.5 4.5v4M7.5 11v.5" stroke="#C94B4B" stroke-width="1.4" stroke-linecap="round"/></svg>
-      <p style="font-size:12px;color:#7A2525;line-height:1.5">Al bloquear la tarjeta no podrá realizar compras ni transferencias. Puede reactivarla cuando quiera desde esta misma sección.</p>
+      <p style="font-size:12px;color:#7A2525;line-height:1.5">Al bloquear la tarjeta no podrá realizar compras ni transferencias. Puede reactivarla cuando quiera.</p>
     </div>
-    <button style="display:block;width:100%;background:var(--red);border:none;border-radius:14px;padding:16px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px" onclick="closeM('m-block');alert('Tarjeta bloqueada temporalmente. Puede reactivarla en cualquier momento.')">Bloquear tarjeta ahora</button>
+    <button style="display:block;width:100%;background:var(--red);border:none;border-radius:14px;padding:16px;color:#fff;font-size:15px;font-weight:700;cursor:pointer;font-family:inherit;margin-bottom:10px" onclick="closeM('m-block');alert('Tarjeta bloqueada temporalmente.')">Bloquear tarjeta ahora</button>
     <button class="ghost-btn" style="margin:0" onclick="closeM('m-block')">Cancelar</button>
   </div>
 </div>
@@ -806,6 +898,7 @@ body{font-family:'DM Sans',system-ui,sans-serif;background:var(--cream)}
 
 <script>
 var amt='',ctName='Omiara Martinez Pinto',ctBg='#E8EDF7',ctColor='#2C4A82',ctInit='OM';
+var helpVisited=false;
 
 function go(id){
   document.querySelectorAll('.scr').forEach(function(s){s.classList.remove('on')});
@@ -817,6 +910,18 @@ function go(id){
     document.getElementById('SC-AMT').textContent='$'+v.toLocaleString('es-CO');
     document.getElementById('SC-NM').textContent=ctName;
     document.getElementById('SC-NM2').textContent=ctName;
+  }
+  // IT-02: stop pulse when help is visited
+  if(id==='s-help')stopPulse();
+}
+
+// IT-02: Stop pulse animation after first visit to help
+function stopPulse(){
+  if(!helpVisited){
+    helpVisited=true;
+    document.querySelectorAll('.help-pulse').forEach(function(el){
+      el.classList.remove('help-pulse');
+    });
   }
 }
 
@@ -874,9 +979,7 @@ function switchP(el,p){
   bars.innerHTML=html;
 }
 
-function showTip(txt){
-  var t=document.getElementById('bar-tip');if(t)t.textContent=txt;
-}
+function showTip(txt){var t=document.getElementById('bar-tip');if(t)t.textContent=txt;}
 
 function openM(id){var m=document.getElementById(id);if(m)m.classList.add('open');}
 function closeM(id){var m=document.getElementById(id);if(m)m.classList.remove('open');}
@@ -904,7 +1007,7 @@ function confirmPay(){
   var svc=document.getElementById('PD-SVC').textContent;
   var val=document.getElementById('PD-VAL').textContent;
   closeM('m-paydetail');
-  alert('Pago de '+svc+' por '+val+' realizado. Comprobante enviado a su correo.');
+  alert('Pago de '+svc+' por '+val+' realizado. Comprobante enviado.');
 }
 
 function setTxn(name,cat,date,a,type,ic,bg){
@@ -930,15 +1033,13 @@ function fltTxn(el,type){
     else if(type==='g')r.style.display=r.dataset.type==='g'?'flex':'none';
     else r.style.display=r.dataset.type==='i'?'flex':'none';
   });
-  // Hide orphan date separators
   seps.forEach(function(sep){
-    var next=sep.nextElementSibling;
-    var hasVisible=false;
+    var next=sep.nextElementSibling,has=false;
     while(next&&!next.classList.contains('date-sep')){
-      if(next.classList.contains('row-item')&&next.style.display!=='none')hasVisible=true;
+      if(next.classList.contains('row-item')&&next.style.display!=='none')has=true;
       next=next.nextElementSibling;
     }
-    sep.style.display=hasVisible?'block':'none';
+    sep.style.display=has?'block':'none';
   });
 }
 
